@@ -22,6 +22,10 @@ class SeriesHandler(tornado.web.RequestHandler):
     """Handler for series'."""
 
     async def get(self, repo, series=None):
+        if series is None:
+            self.write({})
+            return
+
         status = await get_series_status(repo, series)
         self.write(status)
 
