@@ -25,6 +25,12 @@ def develop(c):
 
 
 @task
+def run(c, port=8080):
+    """Run the development server."""
+    c.run('./venv/bin/autolandweb --debug --port %s' % port, pty=True)
+
+
+@task
 def flake8(c):
     """Check the code against flake8."""
     c.run('./venv/bin/flake8 setup.py tasks.py autolandweb tests')
