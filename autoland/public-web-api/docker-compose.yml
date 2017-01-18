@@ -1,0 +1,13 @@
+version: '2'
+services:
+  autolandweb:
+    build:
+      context: .
+      dockerfile: Dockerfile-dev
+    ports:
+     - "9999:9090"
+    volumes:
+     - .:/autoland-public-web-api
+    environment:
+     - AUTOLANDWEB_DEBUG=1
+     - AUTOLANDWEB_PORT=9090

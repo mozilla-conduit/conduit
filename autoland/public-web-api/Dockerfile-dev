@@ -1,0 +1,6 @@
+FROM python:3.5-alpine
+ADD . /autoland-public-web-api
+WORKDIR /autoland-public-web-api
+RUN pip install -r requirements.txt
+RUN pip install -e .
+CMD ["autolandweb"]
