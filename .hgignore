@@ -1,0 +1,8 @@
+# use glob syntax.
+syntax: glob
+*.pyc
+*~
+*.egg-info
+
+autoland/public-web-api/venv
+autoland/public-web-api/.cache
