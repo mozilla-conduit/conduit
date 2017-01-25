@@ -12,11 +12,17 @@ class AutolandController extends React.Component {
   }
 
   componentDidMount() {
-    this.fetch();
+    this.fetch(this.props.params.series_id);
   }
 
-  fetch() {
-    fetch(this.props.url).then(response => response.json()).then(data => {
+  componentWillReceiveProps(nextProps) {
+    if (this.props.params.series_id !== nextProps.params.series_id) {
+      this.fetch(nextProps.params.series_id);
+    }
+  }
+
+  fetch(commits) {
+    fetch(`/fixtures/${commits}.json`).then(response => response.json()).then(data => {
       this.setState({ data });
     });
   }
