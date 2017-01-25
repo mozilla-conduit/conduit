@@ -3,6 +3,10 @@ syntax: glob
 *.pyc
 *~
 *.egg-info
+.DS_Store
 
 autoland/public-web-api/venv
 autoland/public-web-api/.cache
+
+autoland/ui/node_modules/
+autoland/ui/build/

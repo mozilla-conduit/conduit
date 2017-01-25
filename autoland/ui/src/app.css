@@ -1,0 +1,148 @@
+/*
+  Overall structure
+*/
+* {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+header h1, .app {
+  max-width: 900px;
+}
+
+header {
+  background: #f6f6f6;
+  border-bottom: 1px solid #e9e9e9;
+  padding: 10px 14px;
+}
+
+.app {
+  padding: 14px;
+  margin-bottom: 80px;
+}
+
+/*
+  General tags
+*/
+h2 {
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+a {
+  color: #07a;
+}
+
+/*
+  General app spacing and formatting
+*/
+.app p, .app li {
+  line-height: 1.5;
+}
+
+.app p, .app .land-buttons {
+  margin-bottom: 20px;
+}
+
+.error {
+  padding: 6px 8px;
+}
+
+/*
+  Commits table
+*/
+.commits-table {
+  list-style-type: none;
+}
+
+.commits-table li {
+  padding: 10px 20px 10px 0;
+  border-bottom: 1px solid #e9e9e9;
+}
+
+.commits-table li:last-child {
+  border-bottom: 0;
+}
+
+.commit-reviewer {
+  background: #f6f6f6;
+  padding: 2px 4px;
+  border-radius: 3px;
+  margin: 0 3px 0 5px;
+  text-decoration: none;
+}
+
+.commit-reviewer[data-status='r+'] {
+  background: #dfffd7;
+}
+
+.commit-reviewer:hover, .commit-reviewer:active, .commit-reviewer:focus {
+  text-decoration: underline;
+}
+
+.commit-reviewers, .commit-hash, .commit-notification, .commit-author {
+  display: inline-block;
+}
+
+.commit-hash {
+  font-family: monospace;
+}
+
+.commit-reviewers {
+  margin-right: 40px;
+}
+
+.commits-table li {
+  font-size: 90%;
+}
+
+.commit-description {
+  font-weight: bold;
+  font-size: 110%;
+}
+
+.commit-description a {
+  text-decoration: none;
+}
+
+.commit-notification, .error {
+  background: #fff5bb;
+}
+
+.commit-notification {
+  margin-top: 4px;
+}
+
+.commit-buttons {
+  margin-top: 15px;
+}
+
+.commit-buttons a {
+  background-image: linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+  border: 1px solid #ccc;
+  border-bottom-color: #bbb;
+  border-radius: 4px;
+  transition: 0.1s linear all;
+  background-color: #e6e6e6;
+  padding: 3px 8px;
+  font-size: 90%;
+  cursor: pointer;
+  margin-right: 20px;
+  color: inherit;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.commit-buttons a.land {
+  font-weight: bold;
+}
+
+.commit-author, .commit-reviewers {
+  font-size: 90%;
+}

@@ -1,0 +1,18 @@
+{
+  "devDependencies": {
+    "neutrino": "^3.0.3",
+    "neutrino-preset-react": "^2.1.0"
+  },
+  "config": {
+    "preset": "neutrino-preset-react"
+  },
+  "scripts": {
+    "start": "HOST=0.0.0.0 PORT=4000 neutrino start",
+    "build": "neutrino build",
+    "test": "neutrino test"
+  },
+  "dependencies": {
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2"
+  }
+}

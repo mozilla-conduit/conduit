@@ -1,0 +1,103 @@
+{
+  "id": "bz://123456/smacleod",
+  "bug": 123456,
+  "pushes": [
+    {
+      "landing_blocker": null,
+      "commits": [
+        {
+          "id": "Bmc6S5XudOp",
+          "landing_blocker": null,
+          "previous_revisions": [],
+          "revision": "8eb8319674344fde118b0987b30e22cded00f71b",
+          "reviews": [
+            {
+              "created_date": "2013-09-07T02:29:18Z",
+              "reviewer": {
+                "name": "Jyron Bones [:blog]",
+                "nick": "blog",
+                "email": "jyronbones@mozilla.com"
+              },
+              "last_updated_date": "2013-09-07T02:32:18Z",
+              "status": "r+"
+            }
+          ],
+          "status": "active"
+        },
+        {
+          "id": "1qxr8YNzP4h",
+          "landing_blocker": null,
+          "previous_revisions": [
+            "0acfc2c6fd8e92f33acd90c99c035bd3656286ca"
+          ],
+          "revision": "11fb4626f5c357217e3f3a6c8edc22ee5c837224",
+          "reviews": [
+            {
+              "created_date": "2013-09-07T02:29:18Z",
+              "reviewer": {
+                "name": "Jyron Bones [:blog]",
+                "nick": "blog",
+                "email": "jyronbones@mozilla.com"
+              },
+              "last_updated_date": "2013-09-07T02:30:18Z",
+              "status": "r+"
+            }
+          ],
+          "status": "active"
+        }
+      ],
+      "pusher": {
+        "name": "Wavid Dalsh [:waviddalsh]",
+        "email": "waviddalsh@mozilla.com"
+      },
+      "status": "active"
+    },
+    {
+      "landing_blocker": "This push is obsolete.",
+      "commits": [
+        {
+          "id": "1qxr8YNzP4h",
+          "landing_blocker": "This commit is obsolete",
+          "previous_revisions": [],
+          "revision": "0acfc2c6fd8e92f33acd90c99c035bd3656286ca",
+          "status": "obsolete"
+        }
+      ],
+      "pusher": {
+        "name": "Wavid Dalsh [:waviddalsh]",
+        "email": "waviddalsh@mozilla.com"
+      },
+      "status": "obsolete"
+    }
+  ],
+  "repository": "https://hg.mozilla.org/mozilla-central/",
+  "revisions": {
+    "8eb8319674344fde118b0987b30e22cded00f71b": {
+      "commit_id": "Bmc6S5XudOp",
+      "status": "active",
+      "author": "Wavid Dalsh <waviddalsh@mozilla.com>"
+    },
+    "11fb4626f5c357217e3f3a6c8edc22ee5c837224": {
+      "commit_id": "1qxr8YNzP4h",
+      "status": "active",
+      "author": "Wavid Dalsh <waviddalsh@mozilla.com>"
+    },
+    "0acfc2c6fd8e92f33acd90c99c035bd3656286ca": {
+      "commit_id": "1qxr8YNzP4h",
+      "status": "obsolete",
+      "author": "Wavid Dalsh <waviddalsh@mozilla.com>"
+    }
+  },
+  "landings": [
+    {
+      "0acfc2c6fd8e92f33acd90c99c035bd3656286ca": {
+        "status": "backout",
+        "repository": "https://hg.mozilla.org/integration/autoland/",
+        "landed_date": "2013-09-07T02:26:18Z",
+        "commit_id": "1qxr8YNzP4h",
+        "backout_date": "2013-09-07T02:27:18Z",
+        "landed_revision": "59117a9f626cf2e954b9bb592efdc69d8169647f"
+      }
+    }
+  ]
+}
