@@ -7,7 +7,7 @@ services:
     ports:
      - "9999:9090"
     volumes:
-     - .:/autoland-public-web-api
+     - .:/app
     environment:
      - AUTOLANDWEB_DEBUG=1
      - AUTOLANDWEB_PORT=9090
