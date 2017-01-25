@@ -1,7 +1,10 @@
 FROM python:3.5-alpine
+
+ADD requirements.txt /requirements.txt
+RUN pip install -r /requirements.txt
+
 ADD . /app
 WORKDIR /app
-RUN pip install -r requirements.txt
 
 # We install outside of the app directory to create the .egg-info in a
 # location that will not be mounted over. This means /app needs to be
