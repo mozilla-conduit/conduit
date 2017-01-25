@@ -1,0 +1,26 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+FROM node:7-alpine
+
+ENV SRC /code
+
+RUN npm install -g yarn@0.19.1
+
+RUN mkdir -p /code/build /code/src
+ADD package.json yarn.lock /code/
+
+WORKDIR /code
+
+RUN yarn --pure-lockfile
+
+ADD docker/build.sh /code/
+RUN chmod +x /code/build.sh
+
+ADD src/ /code/src/
+
+# Update $PATH so yarn can find scripts installed by dependencies
+ENV PATH /code/node_modules/.bin:$PATH
+
+CMD ["/code/build.sh"]

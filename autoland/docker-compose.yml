@@ -1,0 +1,32 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+version: '2'
+services:
+  web:
+    image: nginx:alpine
+    ports:
+      - "8888:80"
+    volumes:
+      - ./ui/build:/usr/share/nginx/html:ro
+      - ./docker/web/nginx-conf.d:/etc/nginx/conf.d:ro
+
+  uibuilder:
+    build:
+      context: ./ui
+      dockerfile: ./docker/Dockerfile-dev
+    volumes:
+      - ./ui/build:/code/build
+
+  autolandweb:
+    build:
+      context: ./public-web-api
+      dockerfile: ./Dockerfile-dev
+    ports:
+     - "9999:9090"
+    volumes:
+     - ./public-web-api:/app
+    environment:
+     - AUTOLANDWEB_DEBUG=1
+     - AUTOLANDWEB_PORT=9090
