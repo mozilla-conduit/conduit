@@ -23,7 +23,7 @@ class AutolandController extends React.Component {
   }
 
   fetch(commits) {
-    fetch(`/fixtures/${commits}.json`)
+    fetch(`/__tests__/fixtures/${commits}.json`)
       .then(response => {
         if (response.status === 404) {
           this.setState({ error: 'Data for this commit set could not be found.' });

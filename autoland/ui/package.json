@@ -1,19 +1,33 @@
 {
   "devDependencies": {
+    "babel-jest": "^17.0.2",
+    "enzyme": "^2.7.1",
+    "jest": "*",
+    "jest-cli": "^18.1.0",
     "neutrino": "^3.0.3",
-    "neutrino-preset-react": "^2.1.0"
+    "neutrino-preset-react": "^2.1.0",
+    "react-addons-test-utils": "^15.4.2",
+    "react-test-renderer": "^15.4.2"
   },
+  "main": "src/index.js",
   "config": {
     "preset": "neutrino-preset-react"
   },
   "scripts": {
     "start": "HOST=0.0.0.0 PORT=4000 neutrino start",
     "build": "neutrino build",
-    "test": "neutrino test"
+    "test": "jest --no-cache"
   },
   "dependencies": {
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-router": "^3.0.2"
+  },
+  "jest": {
+    "moduleFileExtensions": ["js", "jsx"],
+    "moduleDirectories": ["node_modules"]
+  },
+  "babel": {
+    "presets": [ "react", "es2015" ]
   }
 }

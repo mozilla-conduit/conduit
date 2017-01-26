@@ -8,5 +8,6 @@ syntax: glob
 autoland/public-web-api/venv
 autoland/public-web-api/.cache
 
-autoland/ui/node_modules/
 autoland/ui/build/
+autoland/ui/node_modules/
+autoland/ui/.coverage/
