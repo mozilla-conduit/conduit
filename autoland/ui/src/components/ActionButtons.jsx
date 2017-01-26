@@ -13,6 +13,7 @@ class ActionButtons extends React.Component {
       return;
     }
     this.setState({ landing: true });
+    this.props.landcallback();
   }
 
   render() {

@@ -9,6 +9,7 @@ class AutolandController extends React.Component {
   constructor(props) {
     super(props);
     this.state = { data: null };
+    this.sendPost = this.sendPost.bind(this);
   }
 
   componentDidMount() {
@@ -103,7 +104,7 @@ class AutolandController extends React.Component {
               commits={push.commits}
               failures={failures}
               revisions={data.revisions} />
-          <ActionButtons landable={landable} bug={data.bug} />
+          <ActionButtons landable={landable} bug={data.bug} landcallback={this.sendPost} />
         </div>
     );
   }
