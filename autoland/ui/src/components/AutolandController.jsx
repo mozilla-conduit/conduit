@@ -8,7 +8,7 @@ const AUTOLAND_POST_ENDPOINT = '...';
 class AutolandController extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { data: null };
+    this.state = { data: null, error: null };
     this.sendPost = this.sendPost.bind(this);
   }
 
@@ -23,9 +23,17 @@ class AutolandController extends React.Component {
   }
 
   fetch(commits) {
-    fetch(`/fixtures/${commits}.json`).then(response => response.json()).then(data => {
-      this.setState({ data });
-    });
+    fetch(`/fixtures/${commits}.json`)
+      .then(response => {
+        if (response.status === 404) {
+          this.setState({ error: 'Data for this commit set could not be found.' });
+          return;
+        }
+
+        response.json().then(data => {
+          this.setState({ data, error: null });
+        });
+      });
   }
 
   sendPost() {
@@ -41,10 +49,15 @@ class AutolandController extends React.Component {
   render() {
     const data = this.state.data;
 
+    // Error!  One example could be a 404 for a bad ID
+    if (this.state.error !== null) {
+      return <span className="warning">{this.state.error}</span>;
+    }
+
     // This is the default text for the element while we fetch data
     // during the initial widget creation
     if (data === null) {
-      return <div>Fetching data...</div>;
+      return <span>Fetching data...</span>;
     }
 
     // For now, the only push that matters is the first provided back
@@ -70,13 +83,13 @@ class AutolandController extends React.Component {
       switch (push.landing_blocker) {
         case 'Some commits are not ready to land.':
         case 'Already landed':
-          message = <h2 className="error">{push.landing_blocker}</h2>;
+          message = <h2 className="warning">{push.landing_blocker}</h2>;
           break;
         case 'Landing is already in progress':
           message = <h2>{push.landing_blocker}</h2>;
           break;
         default:
-          message = <h2 className="error">Unrecognized response, please report!</h2>;
+          message = <h2 className="warning">Unrecognized response, please report!</h2>;
       }
     } else if (data.landings && data.landings[0]) {
       Object.keys(landing).forEach(landingId => {
@@ -88,7 +101,7 @@ class AutolandController extends React.Component {
 
       if (failureCount) {
         message = (
-            <h2 className="error">
+            <h2 className="warning">
               Landing failed: {failureCount} failure{failureCount > 1 ? 's' : ''}.
             </h2>
         );

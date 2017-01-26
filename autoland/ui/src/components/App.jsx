@@ -19,6 +19,7 @@ class App extends React.Component {
               <option value="/repos/1/series/example-03-in-progress">Example 3 In progress</option>
               <option value="/repos/1/series/example-04-landed">Example 4 Landed</option>
               <option value="/repos/1/series/example-05-failed">Example 5 Failed</option>
+              <option value="/repos/1/series/fml">Example 6 Error 404</option>
           </select>
         </header>
         <div className="app">

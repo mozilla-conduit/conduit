@@ -49,7 +49,7 @@ a {
   margin-bottom: 20px;
 }
 
-.error {
+.warning {
   padding: 6px 8px;
 }
 
@@ -110,7 +110,7 @@ a {
   text-decoration: none;
 }
 
-.commit-notification, .error {
+.commit-notification, .warning {
   background: #fff5bb;
 }
 
