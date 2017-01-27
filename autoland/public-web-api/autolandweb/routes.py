@@ -3,6 +3,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 import tornado.web
 
+from autolandweb.dockerflow import DOCKERFLOW_ROUTES
 from autolandweb.series import get_series_status
 
 
@@ -44,4 +45,4 @@ ROUTES = [
         r'/api/v1/repos/(?P<repo>' + REPO_REGEX + r')/series/(?P<series>' +
         SERIES_REGEX + r')/?$', SeriesHandler
     ),
-]
+] + DOCKERFLOW_ROUTES
