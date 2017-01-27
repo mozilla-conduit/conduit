@@ -1,11 +1,15 @@
 import React from 'react';
 
+require('./App.css');
+
 class App extends React.Component {
   changeDemoPage(e) {
     this.props.router.push(e.target.value);
   }
 
   render() {
+    document.title = 'Autoland';
+
     return (
       <div>
         <header>
