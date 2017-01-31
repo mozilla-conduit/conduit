@@ -9,15 +9,15 @@ services:
     ports:
       - "8888:80"
     volumes:
-      - ./ui/build:/usr/share/nginx/html:ro
       - ./docker/web/nginx-conf.d:/etc/nginx/conf.d:ro
 
-  uibuilder:
+  yarn:
     build:
       context: ./ui
-      dockerfile: ./docker/Dockerfile-dev
+      dockerfile: ./Dockerfile-dev
+    command: start
     volumes:
-      - ./ui/build:/code/build
+      - ./ui/src:/code/src
 
   autolandweb:
     build:
