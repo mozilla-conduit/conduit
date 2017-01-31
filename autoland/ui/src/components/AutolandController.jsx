@@ -26,24 +26,46 @@ class AutolandController extends React.Component {
     fetch(`/__tests__/fixtures/${commits}.json`)
       .then(response => {
         if (response.status === 404) {
-          this.setState({ error: 'Data for this commit set could not be found.' });
+          this.setState({
+            error: 'Data for this commit set could not be found.',
+            data: null,
+          });
           return;
         }
 
         response.json().then(data => {
           this.setState({ data, error: null });
+        })
+        .catch(() => {
+          this.setState({
+            error: 'Data for this commit set could not be parsed.',
+            data: null,
+          });
         });
       });
   }
 
   sendPost() {
-    fetch(AUTOLAND_POST_ENDPOINT, { method: 'post', mode: 'cors' })
-        .then(response => response.json())
-        .then(data => {
+    fetch(AUTOLAND_POST_ENDPOINT, { method: 'post' })
+      .catch(() => {
+        this.setState({
+          error: 'Request to land commits has failed.',
+          data: null,
+        });
+      })
+      .then(response => {
+        response.json().then(data => {
           /* What to do? */
           if (data) { return; }
           if (this) { return; }
+        })
+        .catch(() => {
+          this.setState({
+            error: 'Response from landing request could not be parsed.',
+            data: null,
+          });
         });
+      });
   }
 
   render() {
