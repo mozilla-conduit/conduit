@@ -27,7 +27,7 @@ function TestApp() {
       {fixtures.map((fixture, i) => (
         <div key={i} className="test-case" data-title={fixture.name}>
           <AutolandController
-            params={{ series_id: fixture.series_id, repo_id: fixture.repo }}/>
+            params={{ series_id: fixture.series_id, repo_id: fixture.repo_id }}/>
         </div>
       ))}
       </div>
