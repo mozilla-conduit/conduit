@@ -8,11 +8,11 @@ import AutolandController from './components/AutolandController';
 
 export default function () {
   render((
-      <Router history={browserHistory}>
-        <Route path="/" component={App}>
-          <Route path="repos/:repo_id/series/:series_id" component={AutolandController} />
-        </Route>
-        <Route path="/test" component={TestApp} />
-      </Router>
+    <Router history={browserHistory}>
+      <Route path="/" component={App}>
+        <Route path="repos/:repo_id/series/:series_id" component={AutolandController} />
+      </Route>
+      <Route path="/test" component={TestApp} />
+    </Router>
   ), document.getElementById('root'));
 }

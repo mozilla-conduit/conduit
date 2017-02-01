@@ -8,7 +8,7 @@ const AUTOLAND_POST_ENDPOINT = '...';
 class AutolandController extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { data: null, error: null };
+    this.state = this.getInitialState();
     this.sendPost = this.sendPost.bind(this);
   }
 
@@ -22,24 +22,30 @@ class AutolandController extends React.Component {
     }
   }
 
+  getInitialState() {
+    return { data: null, error: null };
+  }
+
+  resetStateWithUpdates(stateUpdates) {
+    this.setState({ ...this.getInitialState(), ...stateUpdates });
+  }
+
   fetch(commits) {
     fetch(`/__tests__/fixtures/${commits}.json`)
       .then(response => {
         if (response.status === 404) {
-          this.setState({
+          this.resetStateWithUpdates({
             error: 'Data for this commit set could not be found.',
-            data: null,
           });
           return;
         }
 
         response.json().then(data => {
-          this.setState({ data, error: null });
+          this.resetStateWithUpdates({ data });
         })
         .catch(() => {
-          this.setState({
+          this.resetStateWithUpdates({
             error: 'Data for this commit set could not be parsed.',
-            data: null,
           });
         });
       });
@@ -48,9 +54,8 @@ class AutolandController extends React.Component {
   sendPost() {
     fetch(AUTOLAND_POST_ENDPOINT, { method: 'post' })
       .catch(() => {
-        this.setState({
+        this.resetStateWithUpdates({
           error: 'Request to land commits has failed.',
-          data: null,
         });
       })
       .then(response => {
@@ -60,9 +65,8 @@ class AutolandController extends React.Component {
           if (this) { return; }
         })
         .catch(() => {
-          this.setState({
+          this.resetStateWithUpdates({
             error: 'Response from landing request could not be parsed.',
-            data: null,
           });
         });
       });
@@ -91,15 +95,15 @@ class AutolandController extends React.Component {
     // Messages blurbs based on current state of the push information
     // Defaulting to "all good, here's what you want to land"
     let message = (
-        <div>
-          <h2>Everything looks good!</h2>
-          <p>About to land {push.commits.length} commits
-            to <strong>{data.repository}</strong>.<br/>
-            Please confirm these commit descriptions are correct
-            before landing.<br/>
-            If corrections are required, please amend the
-            commit message and try again.</p>
-        </div>
+      <div>
+        <h2>Everything looks good!</h2>
+        <p>About to land {push.commits.length} commits
+          to <strong>{data.repository}</strong>.<br/>
+          Please confirm these commit descriptions are correct
+          before landing.<br/>
+          If corrections are required, please amend the
+          commit message and try again.</p>
+      </div>
     );
     if (push.landing_blocker !== null) {
       switch (push.landing_blocker) {
@@ -123,9 +127,9 @@ class AutolandController extends React.Component {
 
       if (failureCount) {
         message = (
-            <h2 className="warning">
-              Landing failed: {failureCount} failure{failureCount > 1 ? 's' : ''}.
-            </h2>
+          <h2 className="warning">
+            Landing failed: {failureCount} failure{failureCount > 1 ? 's' : ''}.
+          </h2>
         );
       }
     }
@@ -133,14 +137,17 @@ class AutolandController extends React.Component {
     const landable = (failureCount === 0 && push.landing_blocker === null);
 
     return (
-        <div>
-          {message}
-          <CommitsTable
-              commits={push.commits}
-              failures={failures}
-              revisions={data.revisions} />
-          <ActionButtons landable={landable} bug={data.bug} landcallback={this.sendPost} />
-        </div>
+      <div>
+        {message}
+        <CommitsTable
+          commits={push.commits}
+          failures={failures}
+          revisions={data.revisions} />
+        <ActionButtons
+          landable={landable}
+          bug={data.bug}
+          landcallback={this.sendPost} />
+      </div>
     );
   }
 }
