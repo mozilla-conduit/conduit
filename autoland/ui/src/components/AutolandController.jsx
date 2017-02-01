@@ -1,18 +1,19 @@
 import React from 'react';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import CommitsTable from './CommitsTable';
 import ActionButtons from './ActionButtons';
+import TryChooser from './TryChooser';
 
 const AUTOLAND_POST_ENDPOINT = '...';
 
 class AutolandController extends React.Component {
 
-  defaultState = { data: null, error: null };
+  defaultState = { data: null, error: null, hideTry: true };
 
   constructor(props) {
     super(props);
     this.state = this.defaultState;
-    this.sendPost = this.sendPost.bind(this);
   }
 
   componentDidMount() {
@@ -48,7 +49,7 @@ class AutolandController extends React.Component {
       });
   }
 
-  sendPost() {
+  sendPost = () => {
     fetch(AUTOLAND_POST_ENDPOINT, { method: 'post' })
       .catch(() => {
         this.resetStateWithUpdates({
@@ -67,6 +68,32 @@ class AutolandController extends React.Component {
           });
         });
       });
+  };
+
+  onTryLand = tryString => {
+    alert(`Landed to try with string: ${tryString}`);
+    this.setState({ hideTry: true });
+  };
+
+  renderTryChooser() {
+    let tryChooser = null;
+    if (!this.state.hideTry) {
+      tryChooser = (
+        <TryChooser
+          key="tryChooserComponent"
+          landHandler={this.onTryLand}
+          cancelHandler={() => { this.setState({ hideTry: true }); }} />
+      );
+    }
+
+    return (
+      <ReactCSSTransitionGroup
+        transitionName="try-chooser"
+        transitionEnterTimeout={500}
+        transitionLeaveTimeout={500}>
+        {tryChooser}
+      </ReactCSSTransitionGroup>
+    );
   }
 
   render() {
@@ -132,6 +159,7 @@ class AutolandController extends React.Component {
     }
 
     const landable = (failureCount === 0 && push.landing_blocker === null);
+    const tryable = failureCount === 0;
 
     return (
       <div>
@@ -142,8 +170,11 @@ class AutolandController extends React.Component {
           revisions={data.revisions} />
         <ActionButtons
           landable={landable}
+          tryable={tryable}
           bug={data.bug}
-          landcallback={this.sendPost} />
+          landcallback={this.sendPost}
+          showTryChooser={() => { this.setState({ hideTry: false }); }} />
+        {this.renderTryChooser()}
       </div>
     );
   }

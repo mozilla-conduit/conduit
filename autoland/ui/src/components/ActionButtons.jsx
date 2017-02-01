@@ -19,13 +19,24 @@ class ActionButtons extends React.Component {
   }
 
   render() {
+    let landButton;
+    let tryButton;
+
+    if (this.props.landable) {
+      landButton =
+        <a onClick={this.onLandClick} className="land">
+          {this.state.landing ? 'Landing Commits...' : 'Land Commits'}
+        </a>;
+    }
+
+    if (this.props.tryable) {
+      tryButton = <a onClick={this.props.showTryChooser}>Land to Try</a>;
+    }
+
     return (
       <div className="commit-buttons">
-        {this.props.landable &&
-        <a href=""
-           onClick={this.onLandClick}
-           className="land">{this.state.landing ? 'Landing Commits...' : 'Land Commits'}</a>
-        }
+        {landButton}
+        {tryButton}
         <a href={`https://bugzilla.mozilla.org/show_bug.cgi?id=${this.props.bug}`}>View on Bugzilla</a>
         <a href="">View on Reviewboard</a>
       </div>
