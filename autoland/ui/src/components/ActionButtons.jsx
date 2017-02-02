@@ -8,7 +8,9 @@ class ActionButtons extends React.Component {
   }
 
   onLandClick(e) {
-    e.preventDefault();
+    if (e) {
+      e.preventDefault();
+    }
     if (this.state.landing) {
       return;
     }
