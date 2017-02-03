@@ -82,7 +82,7 @@ class AutolandController extends React.Component {
     // This is the default text for the element while we fetch data
     // during the initial widget creation
     if (data === null) {
-      return <span>Fetching data...</span>;
+      return <span className="fetching-data">Fetching data...</span>;
     }
 
     // For now, the only push that matters is the first provided back
