@@ -9,6 +9,6 @@
     -  Should we automatically refresh the data every minute or so?
 */
 
-import routes from './routes';
+import { renderRoutes } from './routes';
 
-routes();
+renderRoutes();

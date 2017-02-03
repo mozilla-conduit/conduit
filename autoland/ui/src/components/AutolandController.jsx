@@ -6,9 +6,12 @@ import ActionButtons from './ActionButtons';
 const AUTOLAND_POST_ENDPOINT = '...';
 
 class AutolandController extends React.Component {
+
+  defaultState = { data: null, error: null };
+
   constructor(props) {
     super(props);
-    this.state = this.getInitialState();
+    this.state = this.defaultState;
     this.sendPost = this.sendPost.bind(this);
   }
 
@@ -22,12 +25,8 @@ class AutolandController extends React.Component {
     }
   }
 
-  getInitialState() {
-    return { data: null, error: null };
-  }
-
   resetStateWithUpdates(stateUpdates) {
-    this.setState({ ...this.getInitialState(), ...stateUpdates });
+    this.setState({ ...this.defaultState, ...stateUpdates });
   }
 
   fetch(commits) {

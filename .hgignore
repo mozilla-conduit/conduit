@@ -10,4 +10,5 @@ autoland/public-web-api/.cache
 
 autoland/ui/build/
 autoland/ui/node_modules/
+autoland/ui/coverage/
 autoland/ui/.coverage/

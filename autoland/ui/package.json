@@ -24,10 +24,27 @@
     "react-router": "^3.0.2"
   },
   "jest": {
-    "moduleFileExtensions": ["js", "jsx"],
-    "moduleDirectories": ["node_modules"]
+    "moduleFileExtensions": [
+      "js",
+      "jsx"
+    ],
+    "moduleDirectories": [
+      "node_modules"
+    ],
+    "moduleNameMapper": {
+      "\\.css$": "<rootDir>/src/__mocks__/styleMock.js"
+    },
+    "verbose": true,
+    "collectCoverage": false
   },
   "babel": {
-    "presets": [ "react", "es2015" ]
+    "presets": [
+      "react",
+      "es2015"
+    ],
+    "plugins": [
+      "transform-class-properties",
+      "transform-object-rest-spread"
+    ]
   }
 }
