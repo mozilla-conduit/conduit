@@ -12,15 +12,20 @@ from autolandweb.mozlog import LOGGING_CONFIG, tornado_log_function
 from autolandweb.routes import ROUTES
 
 
+def make_app(debug):
+    """Construct a fully configured Tornado Application object."""
+    return tornado.web.Application(
+        ROUTES,
+        debug=debug,
+        log_function=tornado_log_function)
+
+
 @click.command()
 @click.option('--debug', envvar='AUTOLANDWEB_DEBUG', is_flag=True)
 @click.option('--port', envvar='AUTOLANDWEB_PORT', default=8888)
 def autolandweb(debug, port):
     logging.config.dictConfig(LOGGING_CONFIG)
-
-    app = tornado.web.Application(
-        ROUTES, debug=debug, log_function=tornado_log_function
-    )
+    app = make_app(debug)
     app.listen(port)
     tornado.ioloop.IOLoop.current().start()
 
