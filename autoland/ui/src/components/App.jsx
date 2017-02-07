@@ -18,12 +18,13 @@ class App extends React.Component {
             defaultValue={this.props.location.pathname}
             onChange={this.changeDemoPage.bind(this)}>
               <option value="">Change Demo Page</option>
-              <option value="/repos/1/series/example-01-cannot-be-landed">Example 1 Cannot be landed</option>
-              <option value="/repos/1/series/example-02-can-be-landed">Example 2 Can be landed</option>
-              <option value="/repos/1/series/example-03-in-progress">Example 3 In progress</option>
-              <option value="/repos/1/series/example-04-landed">Example 4 Landed</option>
-              <option value="/repos/1/series/example-05-failed">Example 5 Failed</option>
-              <option value="/repos/1/series/fml">Example 6 Error 404</option>
+              <option value="/repos/mozilla-central/series/bz://123456/cannotland">Example 1 Cannot be landed</option>
+              <option value="/repos/mozilla-central/series/bz://123456/canland">Example 2 Can be landed</option>
+              <option value="/repos/mozilla-central/series/bz://123456/inprogress">Example 3 In progress</option>
+              <option value="/repos/mozilla-central/series/bz://123456/landed">Example 4 Landed</option>
+              <option value="/repos/mozilla-central/series/bz://123456/failedland">Example 5 Failed</option>
+              <option value="/repos/void/series/bz://123456/fml">Example 6 Error 404</option>
+              <option value="/repos/mozilla-central/series/bz://123456/echoseries">Example 7 Echo Series 404</option>
           </select>
         </header>
         <div className="app">

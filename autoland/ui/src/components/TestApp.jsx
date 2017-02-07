@@ -7,12 +7,13 @@ require('./TestApp.css');
 
 function TestApp() {
   const fixtures = [
-    { name: 'Cannot be landed', series_id: 'example-01-cannot-be-landed', repo_id: 'test-repo' },
-    { name: 'Can be landed', series_id: 'example-02-can-be-landed', repo_id: 'test-repo' },
-    { name: 'In progress', series_id: 'example-03-in-progress', repo_id: 'test-repo' },
-    { name: 'Landed', series_id: 'example-04-landed', repo_id: 'test-repo' },
-    { name: 'Failed', series_id: 'example-05-failed', repo_id: 'test-repo' },
-    { name: 'Error 404', series_id: 'fml' },
+    { name: 'Cannot be landed', splat: 'bz://123456/cannotland', repo_id: 'mozilla-central' },
+    { name: 'Can be landed', splat: 'bz://123456/canland', repo_id: 'mozilla-central' },
+    { name: 'In progress', splat: 'bz://123456/inprogress', repo_id: 'mozilla-central' },
+    { name: 'Landed', splat: 'bz://123456/landed', repo_id: 'mozilla-central' },
+    { name: 'Failed', splat: 'bz://123456/failedland', repo_id: 'mozilla-central' },
+    { name: 'Error 404', splat: 'bz://123456/fml', repo_id: 'void' },
+    { name: 'Echo Series', splat: 'bz://123456/echoseries', repo_id: 'mozilla-central' },
   ];
 
   document.title = 'Autoland Test Page';
@@ -27,7 +28,7 @@ function TestApp() {
       {fixtures.map((fixture, i) => (
         <div key={i} className="test-case" data-title={fixture.name}>
           <AutolandController
-            params={{ series_id: fixture.series_id, repo_id: fixture.repo_id }}/>
+            params={{ splat: fixture.splat, repo_id: fixture.repo_id }}/>
         </div>
       ))}
       </div>

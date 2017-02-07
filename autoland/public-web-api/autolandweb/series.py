@@ -1,12 +1,19 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+from autolandweb.canned_responses import CANNED_RESPONSES
 
 
 async def get_series_status(repo, series):
     """Return the status of a given commit series."""
     # TODO: Validate the series_id before echoing it back or using
     # it in any queries. The current regex is completely permissive.
+    if repo != 'mozilla-central':
+        return None
+
+    if series in CANNED_RESPONSES:
+        return CANNED_RESPONSES[series]
+
     return {
         'id': series,
         'bug': 123456,

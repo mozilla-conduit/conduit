@@ -8,7 +8,7 @@ describe('AutolandController', () => {
   test('Renders "fetching data" message upon creation', () => {
     const mount = shallow(
       <AutolandController
-        params={{ series_id: 'example-02-can-be-landed', repo_id: 'test-repo' }} />
+        params={{ splat: 'bz://123456/canland', repo_id: 'mozilla-central' }} />
     );
 
     // The "fetching data" message should show right away
@@ -18,7 +18,7 @@ describe('AutolandController', () => {
   test('Error notification displays properly', () => {
     const mount = shallow(
       <AutolandController
-        params={{ series_id: 'example-02-can-be-landed', repo_id: 'test-repo' }} />
+        params={{ splat: 'bz://123456/canland', repo_id: 'mozilla-central' }} />
     );
 
     mount.instance().setState({ error: 'Error!' });

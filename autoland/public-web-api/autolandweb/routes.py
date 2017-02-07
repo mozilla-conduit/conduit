@@ -28,7 +28,11 @@ class SeriesHandler(tornado.web.RequestHandler):
             return
 
         status = await get_series_status(repo, series)
-        self.write(status)
+        if status is None:
+            self.set_status(404)
+            self.write({'error': 'Series not found'})
+        else:
+            self.write(status)
 
 
 REPO_REGEX = r'[a-zA-z-]+'
