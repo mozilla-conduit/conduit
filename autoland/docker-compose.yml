@@ -19,6 +19,14 @@ services:
     volumes:
       - ./ui/src:/code/src
 
+  mountebank:
+    build:
+      context: docker/mountebank/
+    command: start --logfile /mb.log --debug --mock
+    ports:
+    - "8890:2525"
+    - "8891:4000"
+
   autolandweb:
     build:
       context: ./public-web-api
