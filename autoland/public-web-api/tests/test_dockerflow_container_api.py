@@ -23,7 +23,7 @@ def app():
 
 
 @pytest.mark.gen_test
-def test_loadbalancer_heartbeat_returns_200(http_client, base_url):
+async def test_loadbalancer_heartbeat_returns_200(http_client, base_url):
     lb_heartbeat_url = base_url + '/__lbheartbeat__'
-    response = yield http_client.fetch(lb_heartbeat_url)
+    response = await http_client.fetch(lb_heartbeat_url)
     assert response.code == 200
