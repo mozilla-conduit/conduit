@@ -17,4 +17,16 @@ class LoadBalancerHeartbeatHandler(tornado.web.RequestHandler):
         self.set_status(200)
 
 
-DOCKERFLOW_ROUTES = [(r'/__lbheartbeat__/?$', LoadBalancerHeartbeatHandler), ]
+class HeartbeatHandler(tornado.web.RequestHandler):
+    """Handler for Dockerflow __heartbeat__."""
+
+    async def get(self):
+        """Perform health check of autoland backend."""
+        self.write({})
+        self.set_status(200)
+
+
+DOCKERFLOW_ROUTES = [
+    (r'/__lbheartbeat__/?$', LoadBalancerHeartbeatHandler),
+    (r'/__heartbeat__/?$', HeartbeatHandler),
+]
