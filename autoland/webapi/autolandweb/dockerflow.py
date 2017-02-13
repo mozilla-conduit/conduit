@@ -7,6 +7,9 @@ import tornado.web
 class LoadBalancerHeartbeatHandler(tornado.web.RequestHandler):
     """Handler for Dockerflow __lbheartbeat__."""
 
+    def compute_etag(self):
+        return None
+
     async def get(self):
         """Perform health check for load balancer.
 
@@ -15,15 +18,20 @@ class LoadBalancerHeartbeatHandler(tornado.web.RequestHandler):
         """
         self.write({})
         self.set_status(200)
+        self.set_header('Cache-Control', 'no-cache')
 
 
 class HeartbeatHandler(tornado.web.RequestHandler):
     """Handler for Dockerflow __heartbeat__."""
 
+    def compute_etag(self):
+        return None
+
     async def get(self):
         """Perform health check of autoland backend."""
         self.write({})
         self.set_status(200)
+        self.set_header('Cache-Control', 'no-cache')
 
 
 DOCKERFLOW_ROUTES = [
