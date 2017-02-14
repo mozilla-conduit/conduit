@@ -1,7 +1,7 @@
 FROM python:3.5-alpine
 
-RUN groupadd --gid 1001 app && \
-    useradd --uid 1001 --gid 1001 --shell /usr/sbin/nologin app
+RUN addgroup --gid 1001 app && \
+    adduser --uid 1001 --gid 1001 --shell /usr/sbin/nologin app
 
 WORKDIR /app
 COPY requirements.txt /requirements.txt
