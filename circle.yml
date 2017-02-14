@@ -1,0 +1,61 @@
+# These environment variables must be set in CircleCI UI
+#
+# DOCKERHUB_REPO_AUTOLANDWEB - docker hub repo, format: <username>/<repo>
+# DOCKER_EMAIL_AUTOLANDWEB   - login info for docker hub
+# DOCKER_USER_AUTOLANDWEB
+# DOCKER_PASS_AUTOLANDWEB
+machine:
+  services:
+    - docker
+
+dependencies:
+  # make sure to keep the docker cache dir
+  cache_directories:
+    - "~/docker"
+
+  override:
+    - docker info
+
+    # build the container, use circleci's docker cache workaround
+    # only use 1 image per day to keep the cache size from getting
+    # too big and slowing down the build
+    - I="autolandweb-image-$(date +%j).tar"; if [[ -e ~/docker/autolandweb/$I ]]; then echo "Loading $I"; docker load -i ~/docker/autolandweb/$I; fi
+
+    # create version.json
+    - >
+        printf '{"commit":"%s","version":"%s","github-source":"https://github.com/%s/%s","source":"https://hg.mozilla.org/automation/conduit","build":"%s"}\n'
+        "$CIRCLE_SHA1"
+        "$CIRCLE_TAG"
+        "$CIRCLE_PROJECT_USERNAME"
+        "$CIRCLE_PROJECT_REPONAME"
+        "$CIRCLE_BUILD_URL"
+        > version.json
+    - cp version.json $CIRCLE_ARTIFACTS
+
+    # build autolandweb:
+    - cp version.json autoland/public-web-api/
+    - docker build -t autolandweb:build -f autoland/public-web-api/Dockerfile-prod autoland/public-web-api
+    - docker images --no-trunc | awk '/^autolandweb/ {print $3}' | tee $CIRCLE_ARTIFACTS/autolandweb-image-shasum256.txt
+
+    # Clean up any old images and save the new one
+    - I="autolandweb-image-$(date +%j).tar"; mkdir -p ~/docker/autolandweb; rm ~/docker/autolandweb/*; docker save autolandweb:build > ~/docker/autolandweb/$I; ls -l ~/docker/autolandweb
+
+# appropriately tag and push the container to dockerhub
+deployment:
+  hub_latest:
+    branch: "master"
+    commands:
+      - "[ ! -z $DOCKERHUB_REPO_AUTOLANDWEB ]"
+      - docker login -e $DOCKER_EMAIL_AUTOLANDWEB -u $DOCKER_USER_AUTOLANDWEB -p $DOCKER_PASS_AUTOLANDWEB
+      - "docker tag autolandweb:build ${DOCKERHUB_REPO_AUTOLANDWEB}:latest"
+      - "docker push ${DOCKERHUB_REPO_AUTOLANDWEB}:latest"
+
+  hub_releases:
+    # push all tags
+    tag: /.*/
+    commands:
+      - "[ ! -z $DOCKERHUB_REPO_AUTOLANDWEB ]"
+      - docker login -e $DOCKER_EMAIL_AUTOLANDWEB -u $DOCKER_USER_AUTOLANDWEB -p $DOCKER_PASS_AUTOLANDWEB
+      - "docker tag autolandweb:build ${DOCKERHUB_REPO_AUTOLANDWEB}:${CIRCLE_TAG}"
+      - "docker images"
+      - "docker push ${DOCKERHUB_REPO_AUTOLANDWEB}:${CIRCLE_TAG}"

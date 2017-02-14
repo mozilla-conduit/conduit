@@ -1,0 +1,16 @@
+FROM python:3.5-alpine
+
+RUN groupadd --gid 1001 app && \
+    useradd --uid 1001 --gid 1001 --shell /usr/sbin/nologin app
+
+WORKDIR /app
+COPY requirements.txt /requirements.txt
+RUN pip install -r /requirements.txt
+
+COPY . /app
+RUN python ./setup.py develop
+
+# run as non priviledged user
+USER app
+
+CMD ["autolandweb"]
