@@ -9,14 +9,14 @@ from invoke import Collection, task, run
 project_root = os.path.dirname(__file__)
 
 
-@task(name='autolandweb',
+@task(name='web',
       help={'image': 'The image to use to execute the test suite container '
                      '(default: autoland_autolandweb)',
             'testargs': 'Arguments to pass to the test suite (default: \'\')',
             'color': 'Include ANSI colour sequences in test output '
                      '(default: True)'})
-def test_autolandweb(ctx, image='autoland_autolandweb', testargs='',
-                     color=True):
+def autoland_test_web(ctx, image='autoland_autolandweb', testargs='',
+                      color=True):
     """Run the project test suite in a docker container."""
     if color:
         # pytest will produce colour output if it detects a pty, so to get
@@ -29,7 +29,7 @@ def test_autolandweb(ctx, image='autoland_autolandweb', testargs='',
     # directly instead of using docker-compose. We'll build a command
     # similar to 'docker-compose run --rm autolandweb pytest'.
     run('docker run'
-        ' -v {project_root}/public-web-api:/app'
+        ' -v {project_root}/autoland/public-web-api:/app'
         ' --rm'
         ' {pty}'
         ' {image} pytest {args}'.format(
@@ -40,14 +40,14 @@ def test_autolandweb(ctx, image='autoland_autolandweb', testargs='',
         echo=True)
 
 
-@task(default=True, name='all', post=[test_autolandweb])
-def test_all(ctx):
-    """Run all tests for the project."""
+@task(default=True, name='all', post=[autoland_test_web])
+def autoland_test_all(ctx):
+    """Run all tests for autoland."""
     pass
 
 
 @task(name='version')
-def build_version_json(ctx):
+def version_json(ctx):
     """Print version information in JSON format."""
     version = {
         'commit': os.getenv('CIRCLE_SHA1', None),
@@ -63,12 +63,12 @@ def build_version_json(ctx):
 
 namespace = Collection(
     Collection(
-        'test',
-        test_all,
-        test_autolandweb,
+        'autoland',
+        Collection(
+            'test',
+            autoland_test_all,
+            autoland_test_web,
+        ),
     ),
-    Collection(
-        'build',
-        build_version_json,
-    )
+    version_json,
 )
