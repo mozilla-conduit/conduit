@@ -14,6 +14,7 @@ dependencies:
     - "~/docker"
 
   override:
+    - sudo apt update; sudo apt install python3-invoke
     - docker info
 
     # build the container, use circleci's docker cache workaround
@@ -22,14 +23,7 @@ dependencies:
     - I="autolandweb-image-$(date +%j).tar"; if [[ -e ~/docker/autolandweb/$I ]]; then echo "Loading $I"; docker load -i ~/docker/autolandweb/$I; fi
 
     # create version.json
-    - >
-        printf '{"commit":"%s","version":"%s","github-source":"https://github.com/%s/%s","source":"https://hg.mozilla.org/automation/conduit","build":"%s"}\n'
-        "$CIRCLE_SHA1"
-        "$CIRCLE_TAG"
-        "$CIRCLE_PROJECT_USERNAME"
-        "$CIRCLE_PROJECT_REPONAME"
-        "$CIRCLE_BUILD_URL"
-        > version.json
+    - invoke build.version > version.json
     - cp version.json $CIRCLE_ARTIFACTS
 
     # build autolandweb:
