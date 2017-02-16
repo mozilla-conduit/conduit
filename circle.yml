@@ -7,6 +7,9 @@
 machine:
   services:
     - docker
+  python:
+    version: 3.5.2
+
 
 dependencies:
   # make sure to keep the docker cache dir
@@ -14,7 +17,7 @@ dependencies:
     - "~/docker"
 
   override:
-    - sudo apt update; sudo apt install python3-invoke
+    - pip install -r requirements.txt
     - docker info
 
     # build the container, use circleci's docker cache workaround
