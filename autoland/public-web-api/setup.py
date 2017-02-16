@@ -32,12 +32,16 @@ setup(
     keywords='mozilla autoland development',
     packages=find_packages(exclude=['docs', 'tests']),
     install_requires=['tornado>=4.4.2', 'click>=6.7'],
-    extras_require={'test': [
-        'pytest',
-        'yapf',
-        'flake8',
-    ], },
+    extras_require={
+        'test': [
+            'pytest',
+            'yapf',
+            'flake8',
+        ],
+    },
     entry_points={
-        'console_scripts': ['autolandweb=autolandweb.server:autolandweb', ],
+        'console_scripts': [
+            'autolandweb=autolandweb.server:autolandweb',
+        ],
     },
 )

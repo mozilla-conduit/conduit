@@ -15,9 +15,8 @@ from autolandweb.routes import ROUTES
 def make_app(debug):
     """Construct a fully configured Tornado Application object."""
     return tornado.web.Application(
-        ROUTES,
-        debug=debug,
-        log_function=tornado_log_function)
+        ROUTES, debug=debug, log_function=tornado_log_function
+    )
 
 
 @click.command()

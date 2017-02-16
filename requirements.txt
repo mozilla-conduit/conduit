@@ -2,3 +2,6 @@ invoke==0.13.0 \
     --hash=sha256:1ffaaba734fb5419d2f58b3ccf6c51d6cbb0c0bc9ba24c69f6a8b8c3a93b323a \
     --hash=sha256:ad6aaeb46bc17c3c0542935138b46b82c2486f65709eb27315ff8f4ab9b2b3e7 \
     --hash=sha256:1a1992fac5292b97448d1c85dc0793e309c4c376acbc39ff067056d71fdc241d
+docker-compose==1.11.1 \
+    --hash=sha256:509eeca9b95518fe9d3767ab0e0ffde5e33312fe02b2fec46e555078e7f07dd9 \
+    --hash=sha256:9d74ae9dc6a109dcdf03e1f88fc3985ebea72baad9d658419d96a40846bdef5c
