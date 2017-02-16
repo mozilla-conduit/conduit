@@ -10,32 +10,21 @@ machine:
   python:
     version: 3.5.2
 
-
 dependencies:
-  # make sure to keep the docker cache dir
-  cache_directories:
-    - "~/docker"
-
   override:
     - pip install -r requirements.txt
     - docker info
 
-    # build the container, use circleci's docker cache workaround
-    # only use 1 image per day to keep the cache size from getting
-    # too big and slowing down the build
-    - I="autolandweb-image-$(date +%j).tar"; if [[ -e ~/docker/autolandweb/$I ]]; then echo "Loading $I"; docker load -i ~/docker/autolandweb/$I; fi
-
+compile:
+  override:
     # create version.json
-    - invoke build.version > version.json
+    - invoke version > version.json
     - cp version.json $CIRCLE_ARTIFACTS
 
     # build autolandweb:
     - cp version.json autoland/public-web-api/
     - docker build -t autolandweb:build -f autoland/public-web-api/Dockerfile-prod autoland/public-web-api
     - docker images --no-trunc | awk '/^autolandweb/ {print $3}' | tee $CIRCLE_ARTIFACTS/autolandweb-image-shasum256.txt
-
-    # Clean up any old images and save the new one
-    - I="autolandweb-image-$(date +%j).tar"; mkdir -p ~/docker/autolandweb; rm ~/docker/autolandweb/*; docker save autolandweb:build > ~/docker/autolandweb/$I; ls -l ~/docker/autolandweb
 
 # appropriately tag and push the container to dockerhub
 deployment:
