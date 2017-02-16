@@ -34,7 +34,7 @@ compile:
 test:
   override:
     # test autoland:
-    - invoke autoland.test.web
+    - invoke autoland.test.web --keep
 
 # appropriately tag and push the container to dockerhub
 deployment:

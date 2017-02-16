@@ -57,19 +57,24 @@ def autoland_lint_all(ctx):
 
 @task(
     name='web',
-    help={'testargs': 'Arguments to pass to the test suite (default: \'\')'}
+    help={
+        'testargs': 'Arguments to pass to the test suite (default: \'\')',
+        'keep': 'Do not remove the test container after running',
+    }
 )
-def autoland_test_web(ctx, testargs=''):
+def autoland_test_web(ctx, testargs='', keep=False):
     """Test autolandweb."""
     run(
         'docker-compose'
         ' -f {project_root}/autoland/docker-compose.yml'
         ' run'
-        ' --rm'
+        '{rm}'
         ' autolandweb'
         ' pytest {args}'
         ''.format(
-            project_root=project_root, args=testargs
+            project_root=project_root,
+            args=testargs,
+            rm=('' if keep else ' --rm')
         ),
         pty=True,
         echo=True
