@@ -5,6 +5,15 @@ RUN pip install -r /requirements.txt
 ADD test-requirements.txt /test-requirements.txt
 RUN pip install -r /test-requirements.txt
 
+# Create a Dockerflow version file at the root so
+# we don't map over it below.
+RUN echo '{\
+    "source": "https://hg.mozilla.org/automation/conduit",\
+    "version": "0.0.0",\
+    "commit": "",\
+    "build": ""\
+}' >> /version.json
+
 ADD . /app
 WORKDIR /app
 

@@ -6,6 +6,7 @@ Tests to ensure we honour the Dockerflow container API specification.
 
 See https://github.com/mozilla-services/Dockerflow for details.
 """
+import json
 
 import pytest
 
@@ -19,7 +20,14 @@ from autolandweb.server import make_app  # noqa
 
 @pytest.fixture
 def app():
-    return make_app(False)
+    return make_app(
+        False, {
+            'commit': None,
+            'version': 'test',
+            'source': 'https://hg.mozilla.org/automation/conduit',
+            'build': 'test',
+        }
+    )
 
 
 @pytest.mark.gen_test
@@ -38,3 +46,16 @@ async def test_heartbeat_returns_200(http_client, base_url):
     assert response.code == 200
     assert response.headers['Cache-Control'] == 'no-cache'
     assert not response.headers.get_list('Etag')
+
+
+@pytest.mark.gen_test
+async def test_version_returns_200(http_client, base_url):
+    version_url = base_url + '/__version__'
+    response = await http_client.fetch(version_url)
+    assert response.code == 200
+    assert response.headers['Cache-Control'] == 'no-cache'
+    assert not response.headers.get_list('Etag')
+    assert 'application/json' in response.headers['Content-Type']
+
+    data = json.loads(response.body.decode('utf-8'))
+    assert data['version'] == 'test'
