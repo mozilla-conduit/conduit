@@ -15,11 +15,18 @@ def read_version(path):
         return None
 
 
-class LoadBalancerHeartbeatHandler(tornado.web.RequestHandler):
-    """Handler for Dockerflow __lbheartbeat__."""
+class DockerflowHandler(tornado.web.RequestHandler):
+    """Handler which presets caching settings for Dockerflow endpoints."""
 
     def compute_etag(self):
         return None
+
+    def set_default_headers(self):
+        self.set_header('Cache-Control', 'no-cache')
+
+
+class LoadBalancerHeartbeatHandler(DockerflowHandler):
+    """Handler for Dockerflow __lbheartbeat__."""
 
     async def get(self):
         """Perform health check for load balancer.
@@ -29,31 +36,22 @@ class LoadBalancerHeartbeatHandler(tornado.web.RequestHandler):
         """
         self.write({})
         self.set_status(200)
-        self.set_header('Cache-Control', 'no-cache')
 
 
-class HeartbeatHandler(tornado.web.RequestHandler):
+class HeartbeatHandler(DockerflowHandler):
     """Handler for Dockerflow __heartbeat__."""
-
-    def compute_etag(self):
-        return None
 
     async def get(self):
         """Perform health check of autoland backend."""
         self.write({})
         self.set_status(200)
-        self.set_header('Cache-Control', 'no-cache')
 
 
-class VersionHandler(tornado.web.RequestHandler):
+class VersionHandler(DockerflowHandler):
     """Handler for Dockerflow __version__."""
-
-    def compute_etag(self):
-        return None
 
     async def get(self):
         """Respond with version information."""
-        self.set_header('Cache-Control', 'no-cache')
         self.write(self.settings['version_data'])
         self.set_status(200)
 
