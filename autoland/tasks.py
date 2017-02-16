@@ -1,19 +1,22 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+import json
 import os
 
-from invoke import task, run
+from invoke import Collection, task, run
 
 project_root = os.path.dirname(__file__)
 
 
-@task(help={'image': 'The image to use to execute the test suite container '
+@task(name='autolandweb',
+      help={'image': 'The image to use to execute the test suite container '
                      '(default: autoland_autolandweb)',
             'testargs': 'Arguments to pass to the test suite (default: \'\')',
             'color': 'Include ANSI colour sequences in test output '
                      '(default: True)'})
-def test(image='autoland_autolandweb', testargs='', color=True):
+def test_autolandweb(ctx, image='autoland_autolandweb', testargs='',
+                     color=True):
     """Run the project test suite in a docker container."""
     if color:
         # pytest will produce colour output if it detects a pty, so to get
@@ -35,3 +38,37 @@ def test(image='autoland_autolandweb', testargs='', color=True):
             args=testargs,
             pty=pty_flag),
         echo=True)
+
+
+@task(default=True, name='all', post=[test_autolandweb])
+def test_all(ctx):
+    """Run all tests for the project."""
+    pass
+
+
+@task(name='version')
+def build_version_json(ctx):
+    """Print version information in JSON format."""
+    version = {
+        'commit': os.getenv('CIRCLE_SHA1', None),
+        'version': os.getenv('CIRCLE_SHA1', None),
+        'github-source': 'https://github.com/%s/%s' % (
+            os.getenv('CIRCLE_PROJECT_USERNAME', 'mozilla-conduit'),
+            os.getenv('CIRCLE_PROJECT_REPONAME', 'conduit')),
+        'source': 'https://hg.mozilla.org/automation/conduit',
+        'build': os.getenv('CIRCLE_BUILD_URL', None)
+    }
+    print(json.dumps(version))
+
+
+namespace = Collection(
+    Collection(
+        'test',
+        test_all,
+        test_autolandweb,
+    ),
+    Collection(
+        'build',
+        build_version_json,
+    )
+)
