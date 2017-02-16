@@ -9,40 +9,92 @@ from invoke import Collection, task, run
 project_root = os.path.dirname(__file__)
 
 
-@task(name='web',
-      help={'image': 'The image to use to execute the test suite container '
-                     '(default: autoland_autolandweb)',
-            'testargs': 'Arguments to pass to the test suite (default: \'\')',
-            'color': 'Include ANSI colour sequences in test output '
-                     '(default: True)'})
-def autoland_test_web(ctx, image='autoland_autolandweb', testargs='',
-                      color=True):
-    """Run the project test suite in a docker container."""
-    if color:
-        # pytest will produce colour output if it detects a pty, so to get
-        # colour output we'll tell docker to allocate a pty to the container.
-        pty_flag = '-t'
-    else:
-        pty_flag = ''
-
-    # Taken from docker-compose.yml.  On the CI server we call docker
-    # directly instead of using docker-compose. We'll build a command
-    # similar to 'docker-compose run --rm autolandweb pytest'.
-    run('docker run'
-        ' -v {project_root}/autoland/public-web-api:/app'
+@task(name='flake8')
+def autoland_lint_web_flake8(ctx):
+    """Run flake8 for autolandweb."""
+    print('Running flake8:')
+    run('docker-compose'
+        ' -f {project_root}/autoland/docker-compose.yml'
+        ' run'
         ' --rm'
-        ' {pty}'
-        ' {image} pytest {args}'.format(
-            project_root=project_root,
-            image=image,
-            args=testargs,
-            pty=pty_flag),
+        ' autolandweb'
+        ' flake8 setup.py tasks.py autolandweb tests'
+        ''.format(project_root=project_root),
+        echo=True)
+
+
+@task(name='yapf')
+def autoland_lint_web_yapf(ctx):
+    """Run yapf for autolandweb."""
+    run('docker-compose'
+        ' -f {project_root}/autoland/docker-compose.yml'
+        ' run'
+        ' --rm'
+        ' autolandweb'
+        ' yapf --diff --recursive setup.py tasks.py autolandweb tests'
+        ''.format(project_root=project_root),
+        echo=True)
+
+
+@task(default=True, name='all',
+      post=[autoland_lint_web_yapf, autoland_lint_web_flake8])
+def autoland_lint_web(ctx):
+    """Lint autolandweb"""
+    pass
+
+
+@task(default=True, name='all', post=[autoland_lint_web])
+def autoland_lint_all(ctx):
+    """Lint autoland."""
+    pass
+
+
+@task(name='web', help={
+    'testargs': 'Arguments to pass to the test suite (default: \'\')'})
+def autoland_test_web(ctx, testargs=''):
+    """Test autolandweb."""
+    run('docker-compose'
+        ' -f {project_root}/autoland/docker-compose.yml'
+        ' run'
+        ' --rm'
+        ' autolandweb'
+        ' pytest {args}'
+        ''.format(project_root=project_root, args=testargs),
+        pty=True,
         echo=True)
 
 
 @task(default=True, name='all', post=[autoland_test_web])
 def autoland_test_all(ctx):
-    """Run all tests for autoland."""
+    """Test autoland."""
+    pass
+
+
+@task(post=[autoland_test_all])
+def test(ctx):
+    pass
+
+
+@task(name='format')
+def autoland_format(ctx):
+    run('docker-compose'
+        ' -f {project_root}/autoland/docker-compose.yml'
+        ' run'
+        ' --rm'
+        ' autolandweb'
+        ' yapf --in-place --recursive setup.py tasks.py autolandweb tests'
+        ''.format(project_root=project_root),
+        echo=True)
+
+
+@task(name='format', post=[autoland_format])
+def code_format(ctx):
+    """Auto format the code style (MODIFIES FILES!)."""
+    pass
+
+
+@task(post=[autoland_lint_all])
+def lint(ctx):
     pass
 
 
@@ -65,10 +117,23 @@ namespace = Collection(
     Collection(
         'autoland',
         Collection(
+            'lint',
+            Collection(
+                'web',
+                autoland_lint_web,
+                autoland_lint_web_flake8,
+                autoland_lint_web_yapf,
+            ),
+            autoland_lint_all,
+        ),
+        Collection(
             'test',
             autoland_test_all,
             autoland_test_web,
         ),
+        autoland_format,
     ),
+    code_format,
+    test,
     version_json,
 )
