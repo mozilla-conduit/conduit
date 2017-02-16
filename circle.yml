@@ -1,9 +1,9 @@
 # These environment variables must be set in CircleCI UI
 #
-# DOCKERHUB_REPO_AUTOLANDWEB - docker hub repo, format: <username>/<repo>
-# DOCKER_EMAIL_AUTOLANDWEB   - login info for docker hub
-# DOCKER_USER_AUTOLANDWEB
-# DOCKER_PASS_AUTOLANDWEB
+# DOCKERHUB_REPO - docker hub repo, format: <username>/<repo>
+# DOCKER_EMAIL   - login info for docker hub
+# DOCKER_USER
+# DOCKER_PASS
 machine:
   services:
     - docker
@@ -23,15 +23,15 @@ compile:
 
     # build autolandweb:
     - cp version.json autoland/public-web-api/
-    - docker build -t autolandweb:build -f autoland/public-web-api/Dockerfile-prod autoland/public-web-api
-    - docker images --no-trunc | awk '/^autolandweb/ {print $3}' | tee $CIRCLE_ARTIFACTS/autolandweb-image-shasum256.txt
+    - docker build -t autoland.web:build -f autoland/public-web-api/Dockerfile-prod autoland/public-web-api
+    - docker images --no-trunc | awk '/^autoland.web/ {print $3}' | tee $CIRCLE_ARTIFACTS/autoland.web-image-shasum256.txt
 
 # appropriately tag and push the container to dockerhub
 deployment:
-  hub_latest:
+  autoland_web_latest:
     branch: "master"
     commands:
-      - "[ ! -z $DOCKERHUB_REPO_AUTOLANDWEB ]"
-      - docker login -e $DOCKER_EMAIL_AUTOLANDWEB -u $DOCKER_USER_AUTOLANDWEB -p $DOCKER_PASS_AUTOLANDWEB
-      - "docker tag autolandweb:build ${DOCKERHUB_REPO_AUTOLANDWEB}:latest"
-      - "docker push ${DOCKERHUB_REPO_AUTOLANDWEB}:latest"
+      - "[ ! -z $DOCKERHUB_REPO ]"
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - "docker tag autoland.web:build ${DOCKERHUB_REPO}:autoland.web.${CIRCLE_SHA1}"
+      - "docker push ${DOCKERHUB_REPO}:autoland.web.${CIRCLE_SHA1}"
