@@ -29,11 +29,12 @@ compile:
     - docker images --no-trunc | awk '/^autoland.web/ {print $3}' | tee $CIRCLE_ARTIFACTS/autoland.web-image-shasum256.txt
 
     # build development images for tests:
-    - docker-compose -f autoland/docker-compose.yml build
+    # (only build autolandweb for now since we're not testing the others)
+    - docker-compose -f autoland/docker-compose.yml build autolandweb
 test:
   override:
     # test autoland:
-    - invoke autoland.test
+    - invoke autoland.test.web
 
 # appropriately tag and push the container to dockerhub
 deployment:
