@@ -12,7 +12,6 @@ project_root = os.path.dirname(__file__)
 @task(name='flake8')
 def autoland_lint_web_flake8(ctx):
     """Run flake8 for autolandweb."""
-    print('Running flake8:')
     run(
         'docker-compose'
         ' -f {project_root}/autoland/docker-compose.yml'
@@ -150,6 +149,7 @@ namespace = Collection(
         autoland_format,
     ),
     code_format,
+    lint,
     test,
     version_json,
 )
