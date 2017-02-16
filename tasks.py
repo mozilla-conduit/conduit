@@ -13,31 +13,38 @@ project_root = os.path.dirname(__file__)
 def autoland_lint_web_flake8(ctx):
     """Run flake8 for autolandweb."""
     print('Running flake8:')
-    run('docker-compose'
+    run(
+        'docker-compose'
         ' -f {project_root}/autoland/docker-compose.yml'
         ' run'
         ' --rm'
         ' autolandweb'
         ' flake8 setup.py tasks.py autolandweb tests'
         ''.format(project_root=project_root),
-        echo=True)
+        echo=True
+    )
 
 
 @task(name='yapf')
 def autoland_lint_web_yapf(ctx):
     """Run yapf for autolandweb."""
-    run('docker-compose'
+    run(
+        'docker-compose'
         ' -f {project_root}/autoland/docker-compose.yml'
         ' run'
         ' --rm'
         ' autolandweb'
         ' yapf --diff --recursive setup.py tasks.py autolandweb tests'
         ''.format(project_root=project_root),
-        echo=True)
+        echo=True
+    )
 
 
-@task(default=True, name='all',
-      post=[autoland_lint_web_yapf, autoland_lint_web_flake8])
+@task(
+    default=True,
+    name='all',
+    post=[autoland_lint_web_yapf, autoland_lint_web_flake8]
+)
 def autoland_lint_web(ctx):
     """Lint autolandweb"""
     pass
@@ -49,19 +56,25 @@ def autoland_lint_all(ctx):
     pass
 
 
-@task(name='web', help={
-    'testargs': 'Arguments to pass to the test suite (default: \'\')'})
+@task(
+    name='web',
+    help={'testargs': 'Arguments to pass to the test suite (default: \'\')'}
+)
 def autoland_test_web(ctx, testargs=''):
     """Test autolandweb."""
-    run('docker-compose'
+    run(
+        'docker-compose'
         ' -f {project_root}/autoland/docker-compose.yml'
         ' run'
         ' --rm'
         ' autolandweb'
         ' pytest {args}'
-        ''.format(project_root=project_root, args=testargs),
+        ''.format(
+            project_root=project_root, args=testargs
+        ),
         pty=True,
-        echo=True)
+        echo=True
+    )
 
 
 @task(default=True, name='all', post=[autoland_test_web])
@@ -77,14 +90,16 @@ def test(ctx):
 
 @task(name='format')
 def autoland_format(ctx):
-    run('docker-compose'
+    run(
+        'docker-compose'
         ' -f {project_root}/autoland/docker-compose.yml'
         ' run'
         ' --rm'
         ' autolandweb'
         ' yapf --in-place --recursive setup.py tasks.py autolandweb tests'
         ''.format(project_root=project_root),
-        echo=True)
+        echo=True
+    )
 
 
 @task(name='format', post=[autoland_format])
@@ -106,7 +121,8 @@ def version_json(ctx):
         'version': os.getenv('CIRCLE_SHA1', None),
         'github-source': 'https://github.com/%s/%s' % (
             os.getenv('CIRCLE_PROJECT_USERNAME', 'mozilla-conduit'),
-            os.getenv('CIRCLE_PROJECT_REPONAME', 'conduit')),
+            os.getenv('CIRCLE_PROJECT_REPONAME', 'conduit')
+        ),
         'source': 'https://hg.mozilla.org/automation/conduit',
         'build': os.getenv('CIRCLE_BUILD_URL', None)
     }
