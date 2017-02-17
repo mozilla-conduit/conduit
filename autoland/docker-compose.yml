@@ -27,14 +27,14 @@ services:
     - "8890:2525"
     - "8891:4000"
 
-  autolandweb:
+  webapi:
     build:
-      context: ./public-web-api
+      context: ./webapi
       dockerfile: ./Dockerfile-dev
     ports:
      - "9999:9090"
     volumes:
-     - ./public-web-api:/app
+     - ./webapi:/app
     environment:
      - AUTOLANDWEB_DEBUG=1
      - AUTOLANDWEB_PORT=9090

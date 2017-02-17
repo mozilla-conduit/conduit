@@ -5,8 +5,7 @@ syntax: glob
 *.egg-info
 .DS_Store
 
-autoland/public-web-api/venv
-autoland/public-web-api/.cache
+autoland/webapi/.cache
 
 autoland/ui/build/
 autoland/ui/node_modules/

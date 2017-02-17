@@ -23,26 +23,26 @@ compile:
     - invoke version > version.json
     - cp version.json $CIRCLE_ARTIFACTS
 
-    # build autolandweb:
-    - cp version.json autoland/public-web-api/
-    - docker build -t autoland.web:build -f autoland/public-web-api/Dockerfile-prod autoland/public-web-api
-    - docker images --no-trunc | awk '/^autoland.web/ {print $3}' | tee $CIRCLE_ARTIFACTS/autoland.web-image-shasum256.txt
+    # build autoland/webapi:
+    - cp version.json autoland/webapi/
+    - docker build -t autoland.webapi:build -f autoland/webapi/Dockerfile-prod autoland/webapi
+    - docker images --no-trunc | awk '/^autoland.webapi/ {print $3}' | tee $CIRCLE_ARTIFACTS/autoland.webapi-image-shasum256.txt
 
     # build development images for tests:
-    - docker-compose -f autoland/docker-compose.yml build autolandweb
+    - docker-compose -f autoland/docker-compose.yml build webapi
     - docker-compose -f autoland/docker-compose.yml build yarn
 test:
   override:
     # test autoland:
-    - invoke autoland.test.web --keep
+    - invoke autoland.test.webapi --keep
     - invoke autoland.test.ui --keep --no-pty
 
 # appropriately tag and push the container to dockerhub
 deployment:
-  autoland_web_latest:
+  autoland_webapi_latest:
     branch: "master"
     commands:
       - "[ ! -z $DOCKERHUB_REPO ]"
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-      - "docker tag autoland.web:build ${DOCKERHUB_REPO}:autoland.web.${CIRCLE_SHA1}"
-      - "docker push ${DOCKERHUB_REPO}:autoland.web.${CIRCLE_SHA1}"
+      - "docker tag autoland.webapi:build ${DOCKERHUB_REPO}:autoland.webapi.${CIRCLE_SHA1}"
+      - "docker push ${DOCKERHUB_REPO}:autoland.webapi.${CIRCLE_SHA1}"

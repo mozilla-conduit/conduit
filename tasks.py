@@ -10,14 +10,14 @@ project_root = os.path.dirname(__file__)
 
 
 @task(name='flake8')
-def autoland_lint_web_flake8(ctx):
-    """Run flake8 for autolandweb."""
+def autoland_lint_webapi_flake8(ctx):
+    """Run flake8 for autoland/webapi."""
     run(
         'docker-compose'
         ' -f {project_root}/autoland/docker-compose.yml'
         ' run'
         ' --rm'
-        ' autolandweb'
+        ' webapi'
         ' flake8 setup.py tasks.py autolandweb tests'
         ''.format(project_root=project_root),
         echo=True
@@ -25,14 +25,14 @@ def autoland_lint_web_flake8(ctx):
 
 
 @task(name='yapf')
-def autoland_lint_web_yapf(ctx):
-    """Run yapf for autolandweb."""
+def autoland_lint_webapi_yapf(ctx):
+    """Run yapf for autoland/webapi."""
     run(
         'docker-compose'
         ' -f {project_root}/autoland/docker-compose.yml'
         ' run'
         ' --rm'
-        ' autolandweb'
+        ' webapi'
         ' yapf --diff --recursive setup.py tasks.py autolandweb tests'
         ''.format(project_root=project_root),
         echo=True
@@ -42,34 +42,34 @@ def autoland_lint_web_yapf(ctx):
 @task(
     default=True,
     name='all',
-    post=[autoland_lint_web_yapf, autoland_lint_web_flake8]
+    post=[autoland_lint_webapi_yapf, autoland_lint_webapi_flake8]
 )
-def autoland_lint_web(ctx):
-    """Lint autolandweb"""
+def autoland_lint_webapi(ctx):
+    """Lint autoland/webapi"""
     pass
 
 
-@task(default=True, name='all', post=[autoland_lint_web])
+@task(default=True, name='all', post=[autoland_lint_webapi])
 def autoland_lint_all(ctx):
     """Lint autoland."""
     pass
 
 
 @task(
-    name='web',
+    name='webapi',
     help={
         'testargs': 'Arguments to pass to the test suite (default: \'\')',
         'keep': 'Do not remove the test container after running',
     }
 )
-def autoland_test_web(ctx, testargs='', keep=False):
-    """Test autolandweb."""
+def autoland_test_webapi(ctx, testargs='', keep=False):
+    """Test autoland/webapi."""
     run(
         'docker-compose'
         ' -f {project_root}/autoland/docker-compose.yml'
         ' run'
         '{rm}'
-        ' autolandweb'
+        ' webapi'
         ' pytest {args}'
         ''.format(
             project_root=project_root,
@@ -108,7 +108,7 @@ def autoland_test_ui(ctx, testargs='', keep=False, no_pty=False):
     )
 
 
-@task(default=True, name='all', post=[autoland_test_ui, autoland_test_web])
+@task(default=True, name='all', post=[autoland_test_ui, autoland_test_webapi])
 def autoland_test_all(ctx):
     """Test autoland."""
     pass
@@ -126,7 +126,7 @@ def autoland_format(ctx):
         ' -f {project_root}/autoland/docker-compose.yml'
         ' run'
         ' --rm'
-        ' autolandweb'
+        ' webapi'
         ' yapf --in-place --recursive setup.py tasks.py autolandweb tests'
         ''.format(project_root=project_root),
         echo=True
@@ -166,17 +166,17 @@ namespace = Collection(
         Collection(
             'lint',
             Collection(
-                'web',
-                autoland_lint_web,
-                autoland_lint_web_flake8,
-                autoland_lint_web_yapf,
+                'webapi',
+                autoland_lint_webapi,
+                autoland_lint_webapi_flake8,
+                autoland_lint_webapi_yapf,
             ),
             autoland_lint_all,
         ),
         Collection(
             'test',
             autoland_test_all,
-            autoland_test_web,
+            autoland_test_webapi,
             autoland_test_ui,
         ),
         autoland_format,
