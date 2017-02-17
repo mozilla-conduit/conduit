@@ -81,7 +81,33 @@ def autoland_test_web(ctx, testargs='', keep=False):
     )
 
 
-@task(default=True, name='all', post=[autoland_test_web])
+@task(
+    name='ui',
+    help={
+        'testargs': 'Arguments to pass to the test suite (default: \'\')',
+        'keep': 'Do not remove the test container after running',
+    }
+)
+def autoland_test_ui(ctx, testargs='', keep=False):
+    """Test autoland/ui."""
+    run(
+        'docker-compose'
+        ' -f {project_root}/autoland/docker-compose.yml'
+        ' run'
+        '{rm}'
+        ' yarn'
+        ' test {args}'
+        ''.format(
+            project_root=project_root,
+            args=testargs,
+            rm=('' if keep else ' --rm')
+        ),
+        pty=True,
+        echo=True
+    )
+
+
+@task(default=True, name='all', post=[autoland_test_ui, autoland_test_web])
 def autoland_test_all(ctx):
     """Test autoland."""
     pass
@@ -150,6 +176,7 @@ namespace = Collection(
             'test',
             autoland_test_all,
             autoland_test_web,
+            autoland_test_ui,
         ),
         autoland_format,
     ),
