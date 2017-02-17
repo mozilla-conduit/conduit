@@ -18,6 +18,7 @@ services:
     command: start
     volumes:
       - ./ui/src:/code/src
+      - ./ui/build:/code/build
 
   mountebank:
     build:

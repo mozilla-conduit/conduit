@@ -23,14 +23,21 @@ compile:
     - invoke version > version.json
     - cp version.json $CIRCLE_ARTIFACTS
 
+    # build development images for tests:
+    - docker-compose -f autoland/docker-compose.yml build webapi
+    - docker-compose -f autoland/docker-compose.yml build yarn
+
     # build autoland/webapi:
     - cp version.json autoland/webapi/
     - docker build -t autoland.webapi:build -f autoland/webapi/Dockerfile-prod autoland/webapi
     - docker images --no-trunc | awk '/^autoland.webapi/ {print $3}' | tee $CIRCLE_ARTIFACTS/autoland.webapi-image-shasum256.txt
 
-    # build development images for tests:
-    - docker-compose -f autoland/docker-compose.yml build webapi
-    - docker-compose -f autoland/docker-compose.yml build yarn
+    # build autoland/ui:
+    - docker-compose -f autoland/docker-compose.yml run yarn build
+    - cp version.json autoland/ui/build
+    - docker build -t autoland.ui:build -f autoland/ui/Dockerfile-prod autoland/ui
+    - docker images --no-trunc | awk '/^autoland.ui/ {print $3}' | tee $CIRCLE_ARTIFACTS/autoland.ui-image-shasum256.txt
+
 test:
   override:
     # test autoland:
@@ -46,3 +53,5 @@ deployment:
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
       - "docker tag autoland.webapi:build ${DOCKERHUB_REPO}:autoland.webapi.${CIRCLE_SHA1}"
       - "docker push ${DOCKERHUB_REPO}:autoland.webapi.${CIRCLE_SHA1}"
+      - "docker tag autoland.ui:build ${DOCKERHUB_REPO}:autoland.ui.${CIRCLE_SHA1}"
+      - "docker push ${DOCKERHUB_REPO}:autoland.ui.${CIRCLE_SHA1}"
