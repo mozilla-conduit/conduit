@@ -35,7 +35,7 @@ test:
   override:
     # test autoland:
     - invoke autoland.test.web --keep
-    - invoke autoland.test.ui --keep
+    - invoke autoland.test.ui --keep --no-pty
 
 # appropriately tag and push the container to dockerhub
 deployment:

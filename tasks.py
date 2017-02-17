@@ -86,9 +86,10 @@ def autoland_test_web(ctx, testargs='', keep=False):
     help={
         'testargs': 'Arguments to pass to the test suite (default: \'\')',
         'keep': 'Do not remove the test container after running',
+        'no_pty': 'Execute tests without a pty.',
     }
 )
-def autoland_test_ui(ctx, testargs='', keep=False):
+def autoland_test_ui(ctx, testargs='', keep=False, no_pty=False):
     """Test autoland/ui."""
     run(
         'docker-compose'
@@ -102,7 +103,7 @@ def autoland_test_ui(ctx, testargs='', keep=False):
             args=testargs,
             rm=('' if keep else ' --rm')
         ),
-        pty=True,
+        pty=not no_pty,
         echo=True
     )
 
