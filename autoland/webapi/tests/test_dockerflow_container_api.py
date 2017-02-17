@@ -28,7 +28,7 @@ async def test_loadbalancer_heartbeat_returns_200(http_client, base_url):
     response = await http_client.fetch(lb_heartbeat_url)
     assert response.code == 200
     assert response.headers['Cache-Control'] == 'no-cache'
-    assert len(response.headers.get_list('Etag')) == 0
+    assert not response.headers.get_list('Etag')
 
 
 @pytest.mark.gen_test
@@ -37,4 +37,4 @@ async def test_heartbeat_returns_200(http_client, base_url):
     response = await http_client.fetch(heartbeat_url)
     assert response.code == 200
     assert response.headers['Cache-Control'] == 'no-cache'
-    assert len(response.headers.get_list('Etag')) == 0
+    assert not response.headers.get_list('Etag')
