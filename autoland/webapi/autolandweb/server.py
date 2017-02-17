@@ -8,7 +8,7 @@ import tornado.ioloop
 import tornado.log
 import tornado.web
 
-from autolandweb.mozlog import LOGGING_CONFIG, tornado_log_function
+from autolandweb.mozlog import get_mozlog_config, tornado_log_function
 from autolandweb.routes import ROUTES
 
 
@@ -22,8 +22,11 @@ def make_app(debug):
 @click.command()
 @click.option('--debug', envvar='AUTOLANDWEB_DEBUG', is_flag=True)
 @click.option('--port', envvar='AUTOLANDWEB_PORT', default=8888)
-def autolandweb(debug, port):
-    logging.config.dictConfig(LOGGING_CONFIG)
+@click.option('--pretty-log', envvar='AUTOLANDWEB_PRETTY_LOG', default=False)
+def autolandweb(debug, port, pretty_log):
+    logging_config = get_mozlog_config(debug=debug, pretty=pretty_log)
+    logging.config.dictConfig(logging_config)
+
     app = make_app(debug)
     app.listen(port)
     tornado.ioloop.IOLoop.current().start()
