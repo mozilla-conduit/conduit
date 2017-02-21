@@ -4,14 +4,17 @@
     "enzyme": "^2.7.1",
     "jest": "*",
     "jest-cli": "^18.1.0",
-    "neutrino": "^3.0.3",
-    "neutrino-preset-react": "^2.1.0",
+    "neutrino": "^4.0.1",
+    "neutrino-preset-react": "^4.0.1",
     "react-addons-test-utils": "^15.4.2",
     "react-test-renderer": "^15.4.2"
   },
   "main": "src/index.js",
   "config": {
-    "preset": "neutrino-preset-react"
+    "presets": [
+      "neutrino-preset-react",
+      "conduit-preset.js"
+    ]
   },
   "scripts": {
     "start": "HOST=0.0.0.0 PORT=4000 neutrino start",
@@ -19,6 +22,7 @@
     "test": "jest --no-cache"
   },
   "dependencies": {
+    "babel-plugin-transform-class-properties": "^6.23.0",
     "react": "^15.4.2",
     "react-addons-css-transition-group": "^15.4.2",
     "react-dom": "^15.4.2",
@@ -40,8 +44,7 @@
   },
   "babel": {
     "presets": [
-      "react",
-      "es2015"
+      "react"
     ],
     "plugins": [
       "transform-class-properties",
