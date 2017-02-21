@@ -17,18 +17,33 @@ from autolandweb.routes import ROUTES
 logger = logging.getLogger(__name__)
 
 
-def make_app(debug, version_data):
-    """Construct a fully configured Tornado Application object."""
+def make_app(debug=False, version_data=None, reviewboard_url=''):
+    """Construct a fully configured Tornado Application object.
+
+    Leaving out the version_data argument may lead to unexpected behaviour.
+
+    Args:
+        debug: Optional boolean, turns on the Tornado application server's
+            debug mode.
+        version_data: A dictionary with keys and data matching the Dockerflow
+            spec versions.json. Optional, but excluding it may lead to
+            unexpected behaviour.
+            See https://github.com/mozilla-services/Dockerflow/blob/master/docs/version_object.md  # noqa
+        reviewboard_url: Optional string, the URL of the reviewboard host and
+            port to use for API requests. (e.g. 'http://foo.something:0000')
+    """
     return tornado.web.Application(
         ROUTES,
         debug=debug,
         log_function=tornado_log_function,
-        version_data=version_data
+        version_data=version_data,
+        reviewboard_url=reviewboard_url
     )
 
 
 @click.command()
 @click.option('--debug', envvar='AUTOLANDWEB_DEBUG', is_flag=True)
+@click.option('--reviewboard-url', envvar='REVIEWBOARD_URL', default='')
 @click.option('--port', envvar='AUTOLANDWEB_PORT', default=8888)
 @click.option('--pretty-log', envvar='AUTOLANDWEB_PRETTY_LOG', default=False)
 @click.option(
@@ -36,7 +51,7 @@ def make_app(debug, version_data):
     envvar='AUTOLANDWEB_VERSION_PATH',
     default='/app/version.json'
 )
-def autolandweb(debug, port, pretty_log, version_path):
+def autolandweb(debug, reviewboard_url, port, pretty_log, version_path):
     logging_config = get_mozlog_config(debug=debug, pretty=pretty_log)
     logging.config.dictConfig(logging_config)
 
@@ -50,7 +65,7 @@ def autolandweb(debug, port, pretty_log, version_path):
         )
         sys.exit(1)
 
-    app = make_app(debug, version_data)
+    app = make_app(debug, version_data, reviewboard_url)
     app.listen(port)
     tornado.ioloop.IOLoop.current().start()
 

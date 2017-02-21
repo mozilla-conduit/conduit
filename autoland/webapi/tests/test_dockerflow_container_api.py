@@ -20,8 +20,12 @@ from autolandweb.server import make_app  # noqa
 
 @pytest.fixture
 def app():
+    """Returns the tornado.Application instance we'll be testing against.
+
+    Required for pytest-tornado to function.
+    """
     return make_app(
-        False, {
+        version_data={
             'commit': None,
             'version': 'test',
             'source': 'https://hg.mozilla.org/automation/conduit',
