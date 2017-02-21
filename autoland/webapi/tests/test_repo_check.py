@@ -10,7 +10,8 @@ from autolandweb.testing import MountebankClient
 
 import pytest
 
-# FIXME: need to get pycharm test runner to add /app to the container PYTHONPATH # noqa
+# FIXME: need to get pycharm test runner to add /app to the container
+# PYTHONPATH
 import sys
 sys.path.insert(0, '/app')
 

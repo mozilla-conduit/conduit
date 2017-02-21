@@ -10,12 +10,7 @@ import json
 
 import pytest
 
-# FIXME: need to get pycharm test runner to add /app to the container
-# PYTHONPATH
-import sys
-sys.path.insert(0, '/app')
-
-from autolandweb.server import make_app  # noqa
+from autolandweb.server import make_app
 
 
 @pytest.fixture
