@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import TryChooser from '../components/TryChooser';
+import TryChooser from '../src/components/TryChooser';
 
 describe('TryChooser', () => {
 

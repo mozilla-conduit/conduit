@@ -2,9 +2,9 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { createMemoryHistory } from 'react-router';
 
-import { getRoutes } from '../routes';
-import AutolandController from '../components/AutolandController';
-import App from '../components/App';
+import { getRoutes } from '../src/routes';
+import AutolandController from '../src/components/AutolandController';
+import App from '../src/components/App';
 
 describe('Routes', () => {
 

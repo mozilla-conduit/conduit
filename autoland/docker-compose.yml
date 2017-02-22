@@ -19,6 +19,7 @@ services:
     volumes:
       - ./ui/src:/code/src
       - ./ui/build:/code/build
+      - ./ui/test:/code/test
 
   mountebank:
     build:

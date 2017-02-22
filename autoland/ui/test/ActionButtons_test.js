@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import ActionButtons from '../components/ActionButtons';
+import ActionButtons from '../src/components/ActionButtons';
 
 describe('Action Buttons', () => {
 
