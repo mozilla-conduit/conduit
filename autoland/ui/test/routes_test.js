@@ -15,12 +15,12 @@ describe('Routes', () => {
     expect(mount.node.props.routes[0].path).toBe('/test');
   });
 
-  test('"repos/:repo_id/series/:series_id" route renders properly', () => {
+  test('"repos/:repoId/series/:series_id" route renders properly', () => {
     const mount = shallow(getRoutes(createMemoryHistory('repos/1/series/2')));
 
     expect(mount.node.props.routes.length).toBe(2);
     expect(mount.node.props.routes[0].component).toBe(App);
-    expect(mount.node.props.routes[1].path).toBe('repos/:repo_id/series/*');
+    expect(mount.node.props.routes[1].path).toBe('repos/:repoId/series/*');
     expect(mount.node.props.routes[1].component).toBe(AutolandController);
   });
 

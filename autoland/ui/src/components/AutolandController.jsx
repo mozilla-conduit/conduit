@@ -17,19 +17,19 @@ class AutolandController extends React.Component {
   }
 
   componentDidMount() {
-    this.fetch(this.props.params.repo_id, this.props.params.splat);
+    this.fetch(this.props.params.repoId, this.props.params.splat);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.fetch(nextProps.params.repo_id, nextProps.params.splat);
+    this.fetch(nextProps.params.repoId, nextProps.params.splat);
   }
 
   resetStateWithUpdates(stateUpdates) {
     this.setState({ ...this.defaultState, ...stateUpdates });
   }
 
-  fetch(repo_id, series_id) {
-    fetch(`/api/v1/repos/${repo_id}/series/${series_id}`)
+  fetch(repoId, seriesId) {
+    fetch(`/api/v1/repos/${repoId}/series/${seriesId}`)
       .then(response => {
         if (response.status === 404) {
           this.resetStateWithUpdates({
