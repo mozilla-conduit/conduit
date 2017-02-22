@@ -4,7 +4,7 @@
 
 FROM node:7-alpine
 
-RUN npm install -g yarn@0.19.1
+RUN npm install -g yarn@0.20.3
 
 RUN mkdir -p /code/src
 
