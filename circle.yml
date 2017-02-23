@@ -54,7 +54,7 @@ deployment:
       - "docker tag autoland.webapi:build ${DOCKERHUB_REPO}:autoland.webapi.${CIRCLE_SHA1}"
       - "docker push ${DOCKERHUB_REPO}:autoland.webapi.${CIRCLE_SHA1}"
   autoland_ui_latest:
-    brach: "master"
+    branch: "master"
     commands:
       - "[ ! -z $DOCKERHUB_REPO ]"
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
