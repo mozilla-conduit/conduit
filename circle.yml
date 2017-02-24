@@ -47,17 +47,12 @@ test:
 
 # appropriately tag and push the container to dockerhub
 deployment:
-  autoland_webapi_latest:
+  dockerhub_latest:
     branch: "master"
     commands:
       - "[ ! -z $DOCKERHUB_REPO ]"
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
       - "docker tag autoland.webapi:build ${DOCKERHUB_REPO}:autoland.webapi.${CIRCLE_SHA1}"
       - "docker push ${DOCKERHUB_REPO}:autoland.webapi.${CIRCLE_SHA1}"
-  autoland_ui_latest:
-    branch: "master"
-    commands:
-      - "[ ! -z $DOCKERHUB_REPO ]"
-      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
       - "docker tag autoland.ui:build ${DOCKERHUB_REPO}:autoland.ui.${CIRCLE_SHA1}"
       - "docker push ${DOCKERHUB_REPO}:autoland.ui.${CIRCLE_SHA1}"
