@@ -9,12 +9,21 @@ from autolandweb.dockerflow import DOCKERFLOW_ROUTES
 from autolandweb.series import get_series_status
 
 
-class MainHandler(tornado.web.RequestHandler):
+class PublicApiHandler(tornado.web.RequestHandler):
+    def set_default_headers(self):
+        if self.settings['cors_allowed_origins']:
+            self.set_header(
+                'Access-Control-Allow-Origin',
+                self.settings['cors_allowed_origins']
+            )
+
+
+class MainHandler(PublicApiHandler):
     def get(self):
         self.write('Hello, from Autoland')
 
 
-class ReposHandler(tornado.web.RequestHandler):
+class ReposHandler(PublicApiHandler):
     """Handler for repositories."""
 
     async def get(self, repo=None):
@@ -44,7 +53,7 @@ class ReposHandler(tornado.web.RequestHandler):
             response.rethrow()
 
 
-class SeriesHandler(tornado.web.RequestHandler):
+class SeriesHandler(PublicApiHandler):
     """Handler for series'."""
 
     async def get(self, repo, series=None):

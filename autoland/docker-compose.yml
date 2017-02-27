@@ -34,11 +34,12 @@ services:
       context: ./webapi
       dockerfile: ./Dockerfile-dev
     volumes:
-     - ./webapi:/app
+      - ./webapi:/app
     environment:
-     - AUTOLANDWEB_DEBUG=1
-     - AUTOLANDWEB_PORT=9090
-     - AUTOLANDWEB_PRETTY_LOG=1
-     - AUTOLANDWEB_VERSION_PATH=/version.json
+      - AUTOLANDWEB_DEBUG=1
+      - AUTOLANDWEB_PORT=9090
+      - AUTOLANDWEB_PRETTY_LOG=1
+      - AUTOLANDWEB_VERSION_PATH=/version.json
+      - AUTOLANDWEB_CORS_ALLOWED_ORIGINS=*
     depends_on:
       - mountebank

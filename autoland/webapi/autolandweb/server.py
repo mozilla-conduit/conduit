@@ -17,7 +17,12 @@ from autolandweb.routes import ROUTES
 logger = logging.getLogger(__name__)
 
 
-def make_app(debug=False, version_data=None, reviewboard_url=''):
+def make_app(
+    debug=False,
+    version_data=None,
+    reviewboard_url='',
+    cors_allowed_origins=None
+):
     """Construct a fully configured Tornado Application object.
 
     Leaving out the version_data argument may lead to unexpected behaviour.
@@ -37,7 +42,8 @@ def make_app(debug=False, version_data=None, reviewboard_url=''):
         debug=debug,
         log_function=tornado_log_function,
         version_data=version_data,
-        reviewboard_url=reviewboard_url
+        reviewboard_url=reviewboard_url,
+        cors_allowed_origins=cors_allowed_origins
     )
 
 
@@ -51,7 +57,15 @@ def make_app(debug=False, version_data=None, reviewboard_url=''):
     envvar='AUTOLANDWEB_VERSION_PATH',
     default='/app/version.json'
 )
-def autolandweb(debug, reviewboard_url, port, pretty_log, version_path):
+@click.option(
+    '--cors-allowed-origins',
+    envvar='AUTOLANDWEB_CORS_ALLOWED_ORIGINS',
+    default=None
+)
+def autolandweb(
+    debug, reviewboard_url, port, pretty_log, version_path,
+    cors_allowed_origins
+):
     logging_config = get_mozlog_config(debug=debug, pretty=pretty_log)
     logging.config.dictConfig(logging_config)
 
@@ -65,7 +79,7 @@ def autolandweb(debug, reviewboard_url, port, pretty_log, version_path):
         )
         sys.exit(1)
 
-    app = make_app(debug, version_data, reviewboard_url)
+    app = make_app(debug, version_data, reviewboard_url, cors_allowed_origins)
     app.listen(port)
     tornado.ioloop.IOLoop.current().start()
 
