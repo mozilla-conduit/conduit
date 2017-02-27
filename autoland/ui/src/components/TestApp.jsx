@@ -7,13 +7,13 @@ require('./TestApp.css');
 
 function TestApp() {
   const fixtures = [
-    { name: 'Cannot be landed', splat: 'bz://123456/cannotland', repo_id: 'mozilla-central' },
-    { name: 'Can be landed', splat: 'bz://123456/canland', repo_id: 'mozilla-central' },
-    { name: 'In progress', splat: 'bz://123456/inprogress', repo_id: 'mozilla-central' },
-    { name: 'Landed', splat: 'bz://123456/landed', repo_id: 'mozilla-central' },
-    { name: 'Failed', splat: 'bz://123456/failedland', repo_id: 'mozilla-central' },
-    { name: 'Error 404', splat: 'bz://123456/fml', repo_id: 'void' },
-    { name: 'Echo Series', splat: 'bz://123456/echoseries', repo_id: 'mozilla-central' },
+    { name: 'Cannot be landed', splat: 'bz://123456/cannotland', repoId: 'mozilla-central' },
+    { name: 'Can be landed', splat: 'bz://123456/canland', repoId: 'mozilla-central' },
+    { name: 'In progress', splat: 'bz://123456/inprogress', repoId: 'mozilla-central' },
+    { name: 'Landed', splat: 'bz://123456/landed', repoId: 'mozilla-central' },
+    { name: 'Failed', splat: 'bz://123456/failedland', repoId: 'mozilla-central' },
+    { name: 'Error 404', splat: 'bz://123456/fml', repoId: 'void' },
+    { name: 'Echo Series', splat: 'bz://123456/echoseries', repoId: 'mozilla-central' },
   ];
 
   document.title = 'Autoland Test Page';
@@ -28,7 +28,7 @@ function TestApp() {
       {fixtures.map((fixture, i) => (
         <div key={i} className="test-case" data-title={fixture.name}>
           <AutolandController
-            params={{ splat: fixture.splat, repo_id: fixture.repo_id }}/>
+            params={{ splat: fixture.splat, repoId: fixture.repoId }}/>
         </div>
       ))}
       </div>

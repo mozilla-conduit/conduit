@@ -4,8 +4,7 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import CommitsTable from './CommitsTable';
 import ActionButtons from './ActionButtons';
 import TryChooser from './TryChooser';
-
-const AUTOLAND_POST_ENDPOINT = '...';
+import { API_HOST, AUTOLAND_POST_ENDPOINT } from '../constants';
 
 class AutolandController extends React.Component {
 
@@ -29,7 +28,7 @@ class AutolandController extends React.Component {
   }
 
   fetch(repoId, seriesId) {
-    fetch(`/api/v1/repos/${repoId}/series/${seriesId}`)
+    fetch(`${API_HOST}/api/v1/repos/${repoId}/series/${seriesId}`)
       .then(response => {
         if (response.status === 404) {
           this.resetStateWithUpdates({
