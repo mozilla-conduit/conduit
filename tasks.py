@@ -8,6 +8,9 @@ from invoke import Collection, task, run
 
 project_root = os.path.dirname(__file__)
 
+# Name used by docker-compose to create a test-only docker environment.
+project_test_name = 'testautoland'
+
 
 @task(name='flake8')
 def autoland_lint_webapi_flake8(ctx):
@@ -55,24 +58,44 @@ def autoland_lint_all(ctx):
     pass
 
 
+@task(name='remove_containers')
+def autoland_remove_containers(ctx):
+    """Remove all temporary containers created for testing."""
+    if not ctx.config.get('keep_containers'):
+        cmd = 'docker-compose' \
+              ' -f {project_root}/autoland/docker-compose.yml' \
+              ' -p {test_project_name}' \
+              ''.format(
+            project_root=project_root,
+            test_project_name=project_test_name
+        )
+
+        ctx.run(cmd + ' stop', pty=True, echo=True)
+        ctx.run(cmd + ' rm --force -v', pty=True, echo=True)
+
+
 @task(
     name='webapi',
     help={
         'testargs': 'Arguments to pass to the test suite (default: \'\')',
         'keep': 'Do not remove the test container after running',
-    }
+    },
+    post=[autoland_remove_containers]
 )
 def autoland_test_webapi(ctx, testargs='', keep=False):
     """Test autoland/webapi."""
+    ctx.config.keep_containers = keep  # Stashed for our cleanup tasks
     run(
         'docker-compose'
         ' -f {project_root}/autoland/docker-compose.yml'
+        ' -p {test_project_name}'
         ' run'
         '{rm}'
         ' webapi'
         ' pytest {args}'
         ''.format(
             project_root=project_root,
+            test_project_name=project_test_name,
             args=testargs,
             rm=('' if keep else ' --rm')
         ),
@@ -94,12 +117,14 @@ def autoland_test_ui(ctx, testargs='', keep=False, no_pty=False):
     run(
         'docker-compose'
         ' -f {project_root}/autoland/docker-compose.yml'
+        ' -p {test_project_name}'
         ' run'
         '{rm}'
         ' yarn'
         ' test {args}'
         ''.format(
             project_root=project_root,
+            test_project_name=project_test_name,
             args=testargs,
             rm=('' if keep else ' --rm')
         ),
@@ -178,6 +203,7 @@ namespace = Collection(
             autoland_test_all,
             autoland_test_webapi,
             autoland_test_ui,
+            autoland_remove_containers,
         ),
         autoland_format,
     ),

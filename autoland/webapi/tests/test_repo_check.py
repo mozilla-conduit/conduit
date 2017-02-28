@@ -117,7 +117,6 @@ def reviewboard(request, mountebank):
     return FakeReviewBoard(mountebank)
 
 
-@pytest.mark.skip(reason="Will not pass with invoke test.")
 @pytest.mark.gen_test
 async def test_return_info_for_valid_repo(http_client, api_root, reviewboard):
     # Arrange
@@ -133,7 +132,6 @@ async def test_return_info_for_valid_repo(http_client, api_root, reviewboard):
     assert response.code == 200
 
 
-@pytest.mark.skip(reason="Will not pass with invoke test.")
 @pytest.mark.gen_test
 async def test_return_404_if_repo_not_in_reviewboard(
     http_client, api_root, reviewboard
