@@ -11,6 +11,8 @@ services:
       - "9999:9999"
     volumes:
       - ./docker/web/nginx-conf.d:/etc/nginx/conf.d:ro
+    depends_on:
+      - webapi
 
   yarn:
     build:
@@ -41,3 +43,5 @@ services:
      - AUTOLANDWEB_PORT=9090
      - AUTOLANDWEB_PRETTY_LOG=1
      - AUTOLANDWEB_VERSION_PATH=/version.json
+    depends_on:
+      - mountebank
