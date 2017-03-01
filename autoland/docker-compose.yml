@@ -28,9 +28,6 @@ services:
     build:
       context: docker/mountebank/
     command: start --logfile /mb.log --debug --mock
-    ports:
-    - "8890:2525"
-    - "8891:4000"
 
   webapi:
     build:
