@@ -28,7 +28,7 @@
     "build": "neutrino build",
     "lint": "./node_modules/eslint/bin/eslint.js --ext .js,.jsx src/ test/",
     "start": "HOST=0.0.0.0 PORT=4000 neutrino start",
-    "test": "neutrino test --presets neutrino-preset-node neutrino-preset-jest"
+    "test": "neutrino test --presets neutrino-preset-react neutrino-preset-jest"
   },
   "dependencies": {
     "babel-plugin-transform-class-properties": "^6.23.0",
