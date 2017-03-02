@@ -12,52 +12,6 @@ project_root = os.path.dirname(__file__)
 project_test_name = 'testautoland'
 
 
-@task(name='flake8')
-def autoland_lint_webapi_flake8(ctx):
-    """Run flake8 for autoland/webapi."""
-    run(
-        'docker-compose'
-        ' -f {project_root}/autoland/docker-compose.yml'
-        ' run'
-        ' --rm'
-        ' webapi'
-        ' flake8 setup.py tasks.py autolandweb tests'
-        ''.format(project_root=project_root),
-        echo=True
-    )
-
-
-@task(name='yapf')
-def autoland_lint_webapi_yapf(ctx):
-    """Run yapf for autoland/webapi."""
-    run(
-        'docker-compose'
-        ' -f {project_root}/autoland/docker-compose.yml'
-        ' run'
-        ' --rm'
-        ' webapi'
-        ' yapf --diff --recursive setup.py tasks.py autolandweb tests'
-        ''.format(project_root=project_root),
-        echo=True
-    )
-
-
-@task(
-    default=True,
-    name='all',
-    post=[autoland_lint_webapi_yapf, autoland_lint_webapi_flake8]
-)
-def autoland_lint_webapi(ctx):
-    """Lint autoland/webapi"""
-    pass
-
-
-@task(default=True, name='all', post=[autoland_lint_webapi])
-def autoland_lint_all(ctx):
-    """Lint autoland."""
-    pass
-
-
 @task(name='remove-containers')
 def autoland_remove_containers(ctx):
     """Remove all temporary containers created for testing."""
@@ -139,33 +93,91 @@ def autoland_test_all(ctx):
     pass
 
 
-@task(post=[autoland_test_all])
-def test(ctx):
+@task(
+    name='style',
+    help={
+        'keep': 'Do not remove the test container after running',
+    },
+)
+def test_style(ctx, keep=False):
+    """Test the style of the tree."""
+    ctx.config.keep_containers = keep  # Stashed for our cleanup tasks
+    run(
+        'docker-compose'
+        ' -f {project_root}/docker/docker-compose.yml'
+        ' run'
+        '{rm}'
+        ' python-linter'
+        ' pytest tests'
+        ''.format(project_root=project_root, rm=('' if keep else ' --rm')),
+        pty=True,
+        echo=True
+    )
+
+
+@task(default=True, name="all", post=[test_style, autoland_test_all])
+def test_all(ctx):
     pass
 
 
-@task(name='format')
-def autoland_format(ctx):
+@task(name='flake8')
+def lint_flake8(ctx):
+    """Run flake8 for the tree."""
     run(
         'docker-compose'
-        ' -f {project_root}/autoland/docker-compose.yml'
+        ' -f {project_root}/docker/docker-compose.yml'
         ' run'
         ' --rm'
-        ' webapi'
-        ' yapf --in-place --recursive setup.py tasks.py autolandweb tests'
+        ' python-linter'
+        ' flake8 .'
+        ''.format(project_root=project_root),
+        pty=True,
+        echo=True
+    )
+
+
+@task(name='yapf')
+def lint_yapf(ctx):
+    """Run yapf for the tree."""
+    run(
+        'docker-compose'
+        ' -f {project_root}/docker/docker-compose.yml'
+        ' run'
+        ' --rm'
+        ' python-linter'
+        ' yapf'
+        ' --diff --recursive'
+        ' .'
+        ''.format(project_root=project_root),
+        pty=True,
+        echo=True
+    )
+
+
+@task(default=True, name='all', post=[lint_flake8, lint_yapf])
+def lint_all(ctx):
+    pass
+
+
+@task(name='yapf')
+def format_yapf(ctx):
+    run(
+        'docker-compose'
+        ' -f {project_root}/docker/docker-compose.yml'
+        ' run'
+        ' --rm'
+        ' python-linter'
+        ' yapf'
+        ' --in-place --recursive'
+        ' .'
         ''.format(project_root=project_root),
         echo=True
     )
 
 
-@task(name='format', post=[autoland_format])
-def code_format(ctx):
+@task(default=True, name='all', post=[format_yapf])
+def format_all(ctx):
     """Auto format the code style (MODIFIES FILES!)."""
-    pass
-
-
-@task(post=[autoland_lint_all])
-def lint(ctx):
     pass
 
 
@@ -173,14 +185,19 @@ def lint(ctx):
 def version_json(ctx):
     """Print version information in JSON format."""
     version = {
-        'commit': os.getenv('CIRCLE_SHA1', None),
-        'version': os.getenv('CIRCLE_SHA1', None),
-        'github-source': 'https://github.com/%s/%s' % (
+        'commit':
+        os.getenv('CIRCLE_SHA1', None),
+        'version':
+        os.getenv('CIRCLE_SHA1', None),
+        'github-source':
+        'https://github.com/%s/%s' % (
             os.getenv('CIRCLE_PROJECT_USERNAME', 'mozilla-conduit'),
             os.getenv('CIRCLE_PROJECT_REPONAME', 'conduit')
         ),
-        'source': 'https://hg.mozilla.org/automation/conduit',
-        'build': os.getenv('CIRCLE_BUILD_URL', None)
+        'source':
+        'https://hg.mozilla.org/automation/conduit',
+        'build':
+        os.getenv('CIRCLE_BUILD_URL', None)
     }
     print(json.dumps(version))
 
@@ -189,26 +206,24 @@ namespace = Collection(
     Collection(
         'autoland',
         Collection(
-            'lint',
-            Collection(
-                'webapi',
-                autoland_lint_webapi,
-                autoland_lint_webapi_flake8,
-                autoland_lint_webapi_yapf,
-            ),
-            autoland_lint_all,
-        ),
-        Collection(
             'test',
             autoland_test_all,
             autoland_test_webapi,
             autoland_test_ui,
             autoland_remove_containers,
         ),
-        autoland_format,
     ),
-    code_format,
-    lint,
-    test,
+    Collection(
+        'lint',
+        lint_all,
+        lint_yapf,
+        lint_flake8,
+    ),
+    Collection(
+        'format',
+        format_all,
+        format_yapf,
+    ),
+    Collection('test', test_all, test_style),
     version_json,
 )
