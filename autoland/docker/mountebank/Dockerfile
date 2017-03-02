@@ -1,4 +1,4 @@
-FROM node:7-alpine
+FROM node:7.7-alpine
 
 MAINTAINER Mozilla <dev-version-control@lists.mozilla.org>
 
