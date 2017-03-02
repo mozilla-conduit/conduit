@@ -70,7 +70,7 @@ class AutolandController extends React.Component {
   };
 
   onTryLand = tryString => {
-    alert(`Landed to try with string: ${tryString}`);
+    if (tryString) { return; }
     this.setState({ hideTry: true });
   };
 
