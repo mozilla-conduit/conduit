@@ -11,7 +11,17 @@
     "presets": [
       "neutrino-preset-react",
       "conduit-preset.js"
-    ]
+    ],
+    "html": {
+      "scripts": ["/scripts/environment.js"],
+      "links": [
+        {
+          "href": "/images/blank.gif",
+          "rel": "icon",
+          "type": "image/x-icon"
+        }
+      ]
+    }
   },
   "scripts": {
     "start": "HOST=0.0.0.0 PORT=4000 neutrino start",
@@ -20,6 +30,7 @@
   },
   "dependencies": {
     "babel-plugin-transform-class-properties": "^6.23.0",
+    "copy-webpack-plugin": "3.0.1",
     "react": "^15.4.2",
     "react-addons-css-transition-group": "^15.4.2",
     "react-dom": "^15.4.2",

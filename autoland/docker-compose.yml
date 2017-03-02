@@ -13,6 +13,7 @@ services:
       - ./docker/web/nginx-conf.d:/etc/nginx/conf.d:ro
     depends_on:
       - webapi
+      - yarn
 
   yarn:
     build:
@@ -21,6 +22,7 @@ services:
     command: start
     volumes:
       - ./ui/src:/code/src
+      - ./ui/assets:/code/assets
       - ./ui/build:/code/build
       - ./ui/test:/code/test
 

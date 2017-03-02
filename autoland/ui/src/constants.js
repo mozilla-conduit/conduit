@@ -1,10 +1,7 @@
-const hostname = window.location.hostname;
-
-const UI_PRODUCTION_HOSTNAME = 'autoland.mozilla.org';
-const API_PRODUCTION_ORIGIN = 'https://api.autoland.mozilla.org';
-const API_DEVELOPMENT_ORIGIN = `http://${hostname}:9999`;
-
-export const API_HOST = (hostname === UI_PRODUCTION_HOSTNAME ?
-                                      API_PRODUCTION_ORIGIN :
-                                      API_DEVELOPMENT_ORIGIN);
+// Use a stub config in testing
+const environment = window.AUTOLANDUI_ENV || {
+  'API_URL': null
+};
+export const API_URL = environment.API_URL ||
+                       `http://${window.location.hostname}:9999`;
 export const AUTOLAND_POST_ENDPOINT = '...';
