@@ -58,16 +58,16 @@ def autoland_lint_all(ctx):
     pass
 
 
-@task(name='remove_containers')
+@task(name='remove-containers')
 def autoland_remove_containers(ctx):
     """Remove all temporary containers created for testing."""
     if not ctx.config.get('keep_containers'):
-        cmd = 'docker-compose' \
-              ' -f {project_root}/autoland/docker-compose.yml' \
-              ' -p {test_project_name}' \
-              ''.format(
-            project_root=project_root,
-            test_project_name=project_test_name
+        cmd = (
+            'docker-compose'
+            ' -f {project_root}/autoland/docker-compose.yml'
+            ' -p {test_project_name}'
+        ).format(
+            project_root=project_root, test_project_name=project_test_name
         )
 
         ctx.run(cmd + ' stop', pty=True, echo=True)
