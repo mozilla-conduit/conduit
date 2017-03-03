@@ -4,6 +4,7 @@ syntax: glob
 *~
 *.egg-info
 .DS_Store
+.cache/
 
 autoland/webapi/.cache
 
