@@ -8,9 +8,11 @@ services:
     image: nginx:alpine
     ports:
       - "8888:80"
+      - "8889:8889"
       - "9999:9999"
     volumes:
       - ./docker/web/nginx-conf.d:/etc/nginx/conf.d:ro
+      - ./ui/build:/var/www/html
     depends_on:
       - webapi
       - yarn
