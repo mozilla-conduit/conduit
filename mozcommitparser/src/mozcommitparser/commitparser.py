@@ -7,6 +7,8 @@
 import cgi
 import re
 
+# yapf: disable
+
 # These regular expressions are not very robust. Specifically, they fail to
 # handle lists well.
 
@@ -72,12 +74,17 @@ BACK_OUT_MULTIPLE_RE = re.compile(
 # Currently just MozReview-Commit-ID
 METADATA_RE = re.compile('^MozReview-Commit-ID: ')
 
+# yapf: enable
+
 
 def parse_bugs(s):
     bugs_with_duplicates = [int(m[1]) for m in BUG_RE.findall(s)]
     bugs_seen = set()
     bugs_seen_add = bugs_seen.add
-    bugs = [x for x in bugs_with_duplicates if not (x in bugs_seen or bugs_seen_add(x))]
+    bugs = [
+        x for x in bugs_with_duplicates
+        if not (x in bugs_seen or bugs_seen_add(x))
+    ]
     return [bug for bug in bugs if bug < 100000000]
 
 
@@ -118,14 +125,16 @@ def parse_reviewers(commit_description, flag_re=None):
 
 
 def parse_requal_reviewers(commit_description):
-    for reviewer in parse_reviewers(commit_description,
-                                    flag_re=REQUAL_SPECIFIER_RE):
+    for reviewer in parse_reviewers(
+        commit_description, flag_re=REQUAL_SPECIFIER_RE
+    ):
         yield reviewer
 
 
 def parse_rquestion_reviewers(commit_description):
-    for reviewer in parse_reviewers(commit_description,
-                                    flag_re=RQUESTION_SPECIFIER_RE):
+    for reviewer in parse_reviewers(
+        commit_description, flag_re=RQUESTION_SPECIFIER_RE
+    ):
         yield reviewer
 
 
@@ -157,8 +166,9 @@ def replace_reviewers(commit_description, reviewers):
             else:
                 return matchobj.group(0)
 
-        commit_summary = re.sub(REVIEWERS_RE, replace_first_reviewer,
-                                commit_summary)
+        commit_summary = re.sub(
+            REVIEWERS_RE, replace_first_reviewer, commit_summary
+        )
 
         # remove marker values as well as leading separators.  this allows us
         # to remove runs of multiple reviewers and retain the trailing
@@ -248,13 +258,13 @@ def parse_commit_id(s):
     return m.group(1)
 
 
-RE_SOURCE_REPO = re.compile('^Source-Repo: (https?:\/\/.*)$',
-                            re.MULTILINE)
+RE_SOURCE_REPO = re.compile('^Source-Repo: (https?:\/\/.*)$', re.MULTILINE)
 RE_SOURCE_REVISION = re.compile('^Source-Revision: (.*)$', re.MULTILINE)
 
 
-def add_hyperlinks(s,
-                   bugzilla_url='https://bugzilla.mozilla.org/show_bug.cgi?id='):
+def add_hyperlinks(
+    s, bugzilla_url='https://bugzilla.mozilla.org/show_bug.cgi?id='
+):
     """Add hyperlinks to a commit message.
 
     This is useful to be used as a Mercurial template filter for converting
@@ -279,7 +289,7 @@ def add_hyperlinks(s,
             s[0:start],
             cgi.escape(source_repo),
             cgi.escape(source_repo),
-            s[end:])
+            s[end:])  # yapf: disable
 
     m = RE_SOURCE_REVISION.search(s)
     if m:
@@ -294,11 +304,11 @@ def add_hyperlinks(s,
                 cgi.escape(github_repo),
                 cgi.escape(source_revision),
                 cgi.escape(source_revision),
-                s[end:])
+                s[end:])  # yapf: disable
 
     # We replace #\d+ with links to the GitHub issue.
     if github_repo:
-        repl = r'<a href="https://github.com/%s/issues/\1">#\1</a>' % github_repo
+        repl = r'<a href="https://github.com/%s/issues/\1">#\1</a>' % github_repo  # noqa
         s = re.sub(r'#(\d+)', repl, s)
 
     # Bugzilla linking.
