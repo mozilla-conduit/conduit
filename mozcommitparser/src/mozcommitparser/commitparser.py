@@ -236,14 +236,7 @@ def strip_commit_metadata(s):
     while lines and not lines[-1].strip():
         lines.pop(-1)
 
-    if type(s) == str:
-        joiner = b'\n'
-    elif type(s) == unicode:
-        joiner = u'\n'
-    else:
-        raise TypeError('do not know type of commit message: %s' % type(s))
-
-    return joiner.join(lines)
+    return '\n'.join(lines)
 
 
 def parse_commit_id(s):

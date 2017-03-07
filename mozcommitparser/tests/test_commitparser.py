@@ -396,10 +396,6 @@ differs from that used to generate the hash.'''
             'Bug 1 - foo\n\nMozReview-Commit-ID: abcdef\n\nTrailing desc'),
             'Bug 1 - foo\n\n\nTrailing desc')
 
-        # unicode in should get unicode out
-        res = strip_commit_metadata(u'foo\n\nbar')
-        self.assertEqual(res, u'foo\n\nbar')
-        self.assertIsInstance(res, unicode)
 
     def test_parse_commit_id(self):
         self.assertIsNone(parse_commit_id('foo'))
@@ -415,112 +411,112 @@ differs from that used to generate the hash.'''
 class TestAddHyperlinks(unittest.TestCase):
     def test_link_source_repo(self):
         self.assertEqual(add_hyperlinks(
-            b'Source-Repo: not a link\n'),
-            b'Source-Repo: not a link\n')
+            'Source-Repo: not a link\n'),
+            'Source-Repo: not a link\n')
 
         self.assertEqual(add_hyperlinks(
-            b'Source-Repo: https://example.com\n'),
-            b'Source-Repo: <a href="https://example.com">https://example.com</a>\n')
+            'Source-Repo: https://example.com\n'),
+            'Source-Repo: <a href="https://example.com">https://example.com</a>\n')
 
         # On subsequent line
         self.assertEqual(add_hyperlinks(
-            b'summary\n\nSource-Repo: https://example.com\n'),
-            b'summary\n\nSource-Repo: <a href="https://example.com">https://example.com</a>\n')
+            'summary\n\nSource-Repo: https://example.com\n'),
+            'summary\n\nSource-Repo: <a href="https://example.com">https://example.com</a>\n')
 
         # With postfix content.
         self.assertEqual(add_hyperlinks(
-            b'summary\n\nSource-Repo: https://example.com\nnext line\n'),
-            b'summary\n\nSource-Repo: <a href="https://example.com">https://example.com</a>\nnext line\n')
+            'summary\n\nSource-Repo: https://example.com\nnext line\n'),
+            'summary\n\nSource-Repo: <a href="https://example.com">https://example.com</a>\nnext line\n')
 
         self.assertEqual(add_hyperlinks(
-            b'Source-Repo: https://github.com/mozilla/foo\n'),
-            b'Source-Repo: <a href="https://github.com/mozilla/foo">https://github.com/mozilla/foo</a>\n')
+            'Source-Repo: https://github.com/mozilla/foo\n'),
+            'Source-Repo: <a href="https://github.com/mozilla/foo">https://github.com/mozilla/foo</a>\n')
 
         # Check against malicious character in commit message.
         self.assertEqual(add_hyperlinks(
-            b'Source-Repo: https://example.com?bad&escape=%20\n'),
-            b'Source-Repo: <a href="https://example.com?bad&amp;escape=%20">https://example.com?bad&amp;escape=%20</a>\n')
+            'Source-Repo: https://example.com?bad&escape=%20\n'),
+            'Source-Repo: <a href="https://example.com?bad&amp;escape=%20">https://example.com?bad&amp;escape=%20</a>\n')
 
     def test_link_revision(self):
         # GitHub revision is linked.
         self.assertEqual(add_hyperlinks(
-            b'Source-Repo: https://github.com/mozilla/foo\n'
-            b'Source-Revision: abcdef\n'),
-            b'Source-Repo: <a href="https://github.com/mozilla/foo">https://github.com/mozilla/foo</a>\n'
-            b'Source-Revision: <a href="https://github.com/mozilla/foo/commit/abcdef">abcdef</a>\n')
+            'Source-Repo: https://github.com/mozilla/foo\n'
+            'Source-Revision: abcdef\n'),
+            'Source-Repo: <a href="https://github.com/mozilla/foo">https://github.com/mozilla/foo</a>\n'
+            'Source-Revision: <a href="https://github.com/mozilla/foo/commit/abcdef">abcdef</a>\n')
 
         # Non-GitHub revision isn't linked.
         self.assertEqual(add_hyperlinks(
-            b'summary\n\n'
-            b'Source-Repo: https://example.com/foo\n'
-            b'Source-Revision: abcdef\n'),
-            b'summary\n\n'
-            b'Source-Repo: <a href="https://example.com/foo">https://example.com/foo</a>\n'
-            b'Source-Revision: abcdef\n')
+            'summary\n\n'
+            'Source-Repo: https://example.com/foo\n'
+            'Source-Revision: abcdef\n'),
+            'summary\n\n'
+            'Source-Repo: <a href="https://example.com/foo">https://example.com/foo</a>\n'
+            'Source-Revision: abcdef\n')
 
         # Bad characters in revision string are escaped.
         self.assertEqual(add_hyperlinks(
-            b'Source-Repo: https://github.com/mozilla/foo\n'
-            b'Source-Revision: a?b&c=%20\n'),
-            b'Source-Repo: <a href="https://github.com/mozilla/foo">https://github.com/mozilla/foo</a>\n'
-            b'Source-Revision: <a href="https://github.com/mozilla/foo/commit/a?b&amp;c=%20">a?b&amp;c=%20</a>\n')
+            'Source-Repo: https://github.com/mozilla/foo\n'
+            'Source-Revision: a?b&c=%20\n'),
+            'Source-Repo: <a href="https://github.com/mozilla/foo">https://github.com/mozilla/foo</a>\n'
+            'Source-Revision: <a href="https://github.com/mozilla/foo/commit/a?b&amp;c=%20">a?b&amp;c=%20</a>\n')
 
     def test_link_github_issues(self):
         # "#\d+" in messages referencing a source GitHub repo should get linked
         # to GitHub issues.
         self.assertEqual(add_hyperlinks(
-            b'Merge #5\n\n'
-            b'Source-Repo: https://github.com/mozilla/foo\n'),
-            b'Merge <a href="https://github.com/mozilla/foo/issues/5">#5</a>\n\n'
-            b'Source-Repo: <a href="https://github.com/mozilla/foo">https://github.com/mozilla/foo</a>\n')
+            'Merge #5\n\n'
+            'Source-Repo: https://github.com/mozilla/foo\n'),
+            'Merge <a href="https://github.com/mozilla/foo/issues/5">#5</a>\n\n'
+            'Source-Repo: <a href="https://github.com/mozilla/foo">https://github.com/mozilla/foo</a>\n')
 
         self.assertEqual(add_hyperlinks(
-            b'Fix #34252\n\n'
-            b'Related to PR #1321\n\n'
-            b'Source-Repo: https://github.com/mozilla/foo\n'),
-            b'Fix <a href="https://github.com/mozilla/foo/issues/34252">#34252</a>\n\n'
-            b'Related to PR <a href="https://github.com/mozilla/foo/issues/1321">#1321</a>\n\n'
-            b'Source-Repo: <a href="https://github.com/mozilla/foo">https://github.com/mozilla/foo</a>\n')
+            'Fix #34252\n\n'
+            'Related to PR #1321\n\n'
+            'Source-Repo: https://github.com/mozilla/foo\n'),
+            'Fix <a href="https://github.com/mozilla/foo/issues/34252">#34252</a>\n\n'
+            'Related to PR <a href="https://github.com/mozilla/foo/issues/1321">#1321</a>\n\n'
+            'Source-Repo: <a href="https://github.com/mozilla/foo">https://github.com/mozilla/foo</a>\n')
 
         # "#string" isn't linked.
         self.assertEqual(add_hyperlinks(
-            b'Merge #foo\n\n'
-            b'Source-Repo: https://github.com/mozilla/foo\n'),
-            b'Merge #foo\n\n'
-            b'Source-Repo: <a href="https://github.com/mozilla/foo">https://github.com/mozilla/foo</a>\n')
+            'Merge #foo\n\n'
+            'Source-Repo: https://github.com/mozilla/foo\n'),
+            'Merge #foo\n\n'
+            'Source-Repo: <a href="https://github.com/mozilla/foo">https://github.com/mozilla/foo</a>\n')
 
     def test_link_bugzilla(self):
         # Aggressive bug detection works normally.
         self.assertEqual(add_hyperlinks(
-            b' 1234567\nfoo\n'),
-            b' <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1234567">1234567</a>\nfoo\n')
+            ' 1234567\nfoo\n'),
+            ' <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1234567">1234567</a>\nfoo\n')
         self.assertEqual(add_hyperlinks(
-            b'bug 1\n'),
-            b'<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1">bug 1</a>\n')
+            'bug 1\n'),
+            '<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1">bug 1</a>\n')
         self.assertEqual(add_hyperlinks(
-            b'bug 123456\n'),
-            b'<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=123456">bug 123456</a>\n')
+            'bug 123456\n'),
+            '<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=123456">bug 123456</a>\n')
         self.assertEqual(add_hyperlinks(
-            b'12345 is a bug\n'),
-            b'<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=12345">12345</a> is a bug\n')
+            '12345 is a bug\n'),
+            '<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=12345">12345</a> is a bug\n')
         self.assertEqual(add_hyperlinks(
-            b'foo #123456\n'),
-            b'foo #<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=123456">123456</a>\n')
+            'foo #123456\n'),
+            'foo #<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=123456">123456</a>\n')
 
         # When GitHub is in play, bare numbers are not hyperlinked and #\d is
         # for GitHub issues.
 
         self.assertEqual(add_hyperlinks(
-            b'Bug 123456 - Fix all of the things\n\n'
-            b'Source-Repo: https://github.com/mozilla/foo\n'),
-            b'<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=123456">Bug 123456</a> - Fix all of the things\n\n'
-            b'Source-Repo: <a href="https://github.com/mozilla/foo">https://github.com/mozilla/foo</a>\n')
+            'Bug 123456 - Fix all of the things\n\n'
+            'Source-Repo: https://github.com/mozilla/foo\n'),
+            '<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=123456">Bug 123456</a> - Fix all of the things\n\n'
+            'Source-Repo: <a href="https://github.com/mozilla/foo">https://github.com/mozilla/foo</a>\n')
 
         self.assertEqual(add_hyperlinks(
-            b'Merge #4256\n\n'
-            b'This fixes #9000 and bug 324521\n\n'
-            b'Source-Repo: https://github.com/mozilla/foo\n'),
-            b'Merge <a href="https://github.com/mozilla/foo/issues/4256">#4256</a>\n\n'
-            b'This fixes <a href="https://github.com/mozilla/foo/issues/9000">#9000</a> and '
-            b'<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=324521">bug 324521</a>\n\n'
-            b'Source-Repo: <a href="https://github.com/mozilla/foo">https://github.com/mozilla/foo</a>\n')
+            'Merge #4256\n\n'
+            'This fixes #9000 and bug 324521\n\n'
+            'Source-Repo: https://github.com/mozilla/foo\n'),
+            'Merge <a href="https://github.com/mozilla/foo/issues/4256">#4256</a>\n\n'
+            'This fixes <a href="https://github.com/mozilla/foo/issues/9000">#9000</a> and '
+            '<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=324521">bug 324521</a>\n\n'
+            'Source-Repo: <a href="https://github.com/mozilla/foo">https://github.com/mozilla/foo</a>\n')
