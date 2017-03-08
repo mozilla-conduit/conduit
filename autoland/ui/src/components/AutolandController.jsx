@@ -56,11 +56,8 @@ class AutolandController extends React.Component {
         });
       })
       .then(response => {
-        response.json().then(data => {
-          /* What to do? */
-          if (data) { return; }
-          if (this) { return; }
-        })
+        // TODO:  Display the data after a POST is sent
+        response.json().then(data => data)
         .catch(() => {
           this.resetStateWithUpdates({
             error: 'Response from landing request could not be parsed.',

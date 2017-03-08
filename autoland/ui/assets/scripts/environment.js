@@ -9,5 +9,5 @@
  */
 
 window.AUTOLANDUI_ENV = {
-  'API_URL': null // Uses the local dev host when null.
+  API_URL: null // Uses the local dev host when null.
 };

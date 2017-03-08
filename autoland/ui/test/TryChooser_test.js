@@ -11,7 +11,7 @@ describe('TryChooser', () => {
     );
     const tryString = 'try: test string';
 
-    mount.setState({ tryString: tryString });
+    mount.setState({ tryString });
     expect(mount.find('textarea').props().value).toBe(tryString);
   });
 
@@ -21,7 +21,7 @@ describe('TryChooser', () => {
       <TryChooser landHandler={callback} />
     );
     const tryString = 'try: test string';
-    mount.setState({ tryString: tryString });
+    mount.setState({ tryString });
 
     mount.find('.try-chooser-land').simulate('click');
     expect(callback.mock.calls.length).toBe(1);
