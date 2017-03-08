@@ -1,9 +1,10 @@
 {
   "devDependencies": {
     "enzyme": "^2.7.1",
-    "neutrino": "^4.0.1",
-    "neutrino-preset-jest": "^4.0.1",
-    "neutrino-preset-react": "^4.0.1",
+    "neutrino": "^4.3.0",
+    "neutrino-preset-airbnb-base": "4.3.1",
+    "neutrino-preset-jest": "^4.3.0",
+    "neutrino-preset-react": "^4.2.3",
     "react-addons-test-utils": "^15.4.2"
   },
   "main": "src/index.js",
@@ -24,8 +25,9 @@
     }
   },
   "scripts": {
-    "start": "HOST=0.0.0.0 PORT=4000 neutrino start",
     "build": "neutrino build",
+    "lint": "./node_modules/eslint/bin/eslint.js --ext .js,.jsx src/ test/",
+    "start": "HOST=0.0.0.0 PORT=4000 neutrino start",
     "test": "neutrino test --presets neutrino-preset-node neutrino-preset-jest"
   },
   "dependencies": {
