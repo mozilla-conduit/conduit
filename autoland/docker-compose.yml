@@ -36,10 +36,9 @@ services:
     volumes:
       - ./webapi:/app
     environment:
-      - AUTOLANDWEB_DEBUG=1
-      - AUTOLANDWEB_PORT=9090
-      - AUTOLANDWEB_PRETTY_LOG=1
-      - AUTOLANDWEB_VERSION_PATH=/version.json
+      - DEBUG=1
+      - PRETTY_LOG=1
+      - VERSION_PATH=/version.json
       - AC_ALLOW_ORIGIN=*
     depends_on:
       - mountebank

@@ -49,14 +49,12 @@ def make_app(
 
 
 @click.command()
-@click.option('--debug', envvar='AUTOLANDWEB_DEBUG', is_flag=True)
+@click.option('--debug', envvar='DEBUG', is_flag=True)
 @click.option('--reviewboard-url', envvar='REVIEWBOARD_URL', default='')
-@click.option('--port', envvar='AUTOLANDWEB_PORT', default=8888)
-@click.option('--pretty-log', envvar='AUTOLANDWEB_PRETTY_LOG', default=False)
+@click.option('--port', envvar='PORT', default=80)
+@click.option('--pretty-log', envvar='PRETTY_LOG', default=False)
 @click.option(
-    '--version-path',
-    envvar='AUTOLANDWEB_VERSION_PATH',
-    default='/app/version.json'
+    '--version-path', envvar='VERSION_PATH', default='/app/version.json'
 )
 @click.option('--ac-allow-origin', envvar='AC_ALLOW_ORIGIN', default=None)
 def autolandweb(
