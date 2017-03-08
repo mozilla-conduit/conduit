@@ -18,10 +18,7 @@ logger = logging.getLogger(__name__)
 
 
 def make_app(
-    debug=False,
-    version_data=None,
-    reviewboard_url='',
-    cors_allowed_origins=None
+    debug=False, version_data=None, reviewboard_url='', ac_allow_origin=None
 ):
     """Construct a fully configured Tornado Application object.
 
@@ -36,6 +33,10 @@ def make_app(
             See https://github.com/mozilla-services/Dockerflow/blob/master/docs/version_object.md  # noqa
         reviewboard_url: Optional string, the URL of the reviewboard host and
             port to use for API requests. (e.g. 'http://foo.something:0000')
+        ac_allow_origin: A string of the origin which may perform CORS requests
+            to the server. This will be used as the value of the
+            'Access-Control-Allow-Origin' header. Passing None will result in
+            no header being set, which is restrictive.
     """
     return tornado.web.Application(
         ROUTES,
@@ -43,7 +44,7 @@ def make_app(
         log_function=tornado_log_function,
         version_data=version_data,
         reviewboard_url=reviewboard_url,
-        cors_allowed_origins=cors_allowed_origins
+        ac_allow_origin=ac_allow_origin
     )
 
 
@@ -57,14 +58,9 @@ def make_app(
     envvar='AUTOLANDWEB_VERSION_PATH',
     default='/app/version.json'
 )
-@click.option(
-    '--cors-allowed-origins',
-    envvar='AUTOLANDWEB_CORS_ALLOWED_ORIGINS',
-    default=None
-)
+@click.option('--ac-allow-origin', envvar='AC_ALLOW_ORIGIN', default=None)
 def autolandweb(
-    debug, reviewboard_url, port, pretty_log, version_path,
-    cors_allowed_origins
+    debug, reviewboard_url, port, pretty_log, version_path, ac_allow_origin
 ):
     logging_config = get_mozlog_config(debug=debug, pretty=pretty_log)
     logging.config.dictConfig(logging_config)
@@ -79,7 +75,7 @@ def autolandweb(
         )
         sys.exit(1)
 
-    app = make_app(debug, version_data, reviewboard_url, cors_allowed_origins)
+    app = make_app(debug, version_data, reviewboard_url, ac_allow_origin)
     app.listen(port)
     tornado.ioloop.IOLoop.current().start()
 

@@ -11,11 +11,9 @@ from autolandweb.series import get_series_status
 
 class PublicApiHandler(tornado.web.RequestHandler):
     def set_default_headers(self):
-        if self.settings['cors_allowed_origins']:
-            self.set_header(
-                'Access-Control-Allow-Origin',
-                self.settings['cors_allowed_origins']
-            )
+        origin = self.settings.get('ac_allow_origin', None)
+        if origin is not None:
+            self.set_header('Access-Control-Allow-Origin', origin)
 
 
 class MainHandler(PublicApiHandler):

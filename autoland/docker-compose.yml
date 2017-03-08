@@ -40,6 +40,6 @@ services:
       - AUTOLANDWEB_PORT=9090
       - AUTOLANDWEB_PRETTY_LOG=1
       - AUTOLANDWEB_VERSION_PATH=/version.json
-      - AUTOLANDWEB_CORS_ALLOWED_ORIGINS=*
+      - AC_ALLOW_ORIGIN=*
     depends_on:
       - mountebank

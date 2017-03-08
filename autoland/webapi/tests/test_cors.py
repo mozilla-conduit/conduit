@@ -22,7 +22,7 @@ def app():
 @pytest.mark.gen_test
 async def test_cors_unset_without_config_option(http_client, base_url, app):
     root_url = base_url + '/'
-    app.settings['cors_allowed_origins'] = None
+    app.settings['ac_allow_origin'] = None
     response = await http_client.fetch(root_url)
     assert response.code == 200
     assert not response.headers.get_list('Access-Control-Allow-Origin')
@@ -31,8 +31,8 @@ async def test_cors_unset_without_config_option(http_client, base_url, app):
 @pytest.mark.gen_test
 async def test_cors_header_set_from_config(http_client, base_url, app):
     root_url = base_url + '/'
-    allowed_origins = 'https://autoland.mozilla.org'
-    app.settings['cors_allowed_origins'] = allowed_origins
+    origin = 'https://autoland.mozilla.org'
+    app.settings['ac_allow_origin'] = origin
     response = await http_client.fetch(root_url)
     assert response.code == 200
-    assert response.headers['Access-Control-Allow-Origin'] == allowed_origins
+    assert response.headers['Access-Control-Allow-Origin'] == origin
