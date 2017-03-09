@@ -107,7 +107,7 @@ def test_style(ctx, keep=False):
         ' -f {project_root}/docker/docker-compose.yml'
         ' run'
         '{rm}'
-        ' python-linter'
+        ' py3-linter'
         ' pytest tests'
         ''.format(project_root=project_root, rm=('' if keep else ' --rm')),
         pty=True,
@@ -128,7 +128,7 @@ def lint_flake8(ctx):
         ' -f {project_root}/docker/docker-compose.yml'
         ' run'
         ' --rm'
-        ' python-linter'
+        ' py3-linter'
         ' flake8 .'
         ''.format(project_root=project_root),
         pty=True,
@@ -144,7 +144,7 @@ def lint_yapf(ctx):
         ' -f {project_root}/docker/docker-compose.yml'
         ' run'
         ' --rm'
-        ' python-linter'
+        ' py3-linter'
         ' yapf'
         ' --diff --recursive'
         ' .'
@@ -166,7 +166,7 @@ def format_yapf(ctx):
         ' -f {project_root}/docker/docker-compose.yml'
         ' run'
         ' --rm'
-        ' python-linter'
+        ' py3-linter'
         ' yapf'
         ' --in-place --recursive'
         ' .'

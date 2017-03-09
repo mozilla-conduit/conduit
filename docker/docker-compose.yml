@@ -4,9 +4,9 @@
 
 version: '2'
 services:
-  python-linter:
+  py3-linter:
     build:
       context: ../
-      dockerfile: docker/python-lint-dockerfile
+      dockerfile: docker/py3-linter-dockerfile
     volumes:
      - ../:/code/
