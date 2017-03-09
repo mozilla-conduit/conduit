@@ -4,16 +4,11 @@
 
 version: '2'
 services:
-  py3-linter:
+  stagingrepo:
     build:
-      context: ../
-      dockerfile: docker/py3-linter-dockerfile
+      context: ./
+      dockerfile: ./docker/stagingrepo/dockerfile-dev
     volumes:
-     - ../:/code/
-
-  py2-linter:
-    build:
-      context: ../
-      dockerfile: docker/py2-linter-dockerfile
-    volumes:
-     - ../:/code/
+      - ./:/app
+    ports:
+      - "8888:80"

@@ -93,6 +93,63 @@ def autoland_test_all(ctx):
     pass
 
 
+@task(name='flake8')
+def autoland_lint_flake8(ctx):
+    """Run flake8"""
+    run(
+        'docker-compose'
+        ' -f {project_root}/docker/docker-compose.yml'
+        ' run'
+        ' --rm'
+        ' py3-linter'
+        ' flake8 autoland'
+        ''.format(project_root=project_root),
+        pty=True,
+        echo=True
+    )
+
+
+@task(name='yapf')
+def autoland_lint_yapf(ctx):
+    """Run yapf"""
+    run(
+        'docker-compose'
+        ' -f {project_root}/docker/docker-compose.yml'
+        ' run'
+        ' --rm'
+        ' py3-linter'
+        ' yapf'
+        ' --diff --recursive'
+        ' autoland'
+        ''.format(project_root=project_root),
+        pty=True,
+        echo=True
+    )
+
+
+@task(
+    default=True, name='all', post=[autoland_lint_flake8, autoland_lint_yapf]
+)
+def autoland_lint_all(ctx):
+    pass
+
+
+@task(default=True, name='all')
+def autoland_format_all(ctx):
+    run(
+        'docker-compose'
+        ' -f {project_root}/docker/docker-compose.yml'
+        ' run'
+        ' --rm'
+        ' py3-linter'
+        ' yapf'
+        ' --in-place --recursive'
+        ' autoland'
+        ''.format(project_root=project_root),
+        echo=True
+    )
+
+
 @task(
     name='style',
     help={
@@ -121,15 +178,15 @@ def test_all(ctx):
 
 
 @task(name='flake8')
-def lint_flake8(ctx):
-    """Run flake8 for the tree."""
+def commitindex_lint_flake8(ctx):
+    """Run flake8"""
     run(
         'docker-compose'
         ' -f {project_root}/docker/docker-compose.yml'
         ' run'
         ' --rm'
         ' py3-linter'
-        ' flake8 .'
+        ' flake8 commitindex'
         ''.format(project_root=project_root),
         pty=True,
         echo=True
@@ -137,8 +194,8 @@ def lint_flake8(ctx):
 
 
 @task(name='yapf')
-def lint_yapf(ctx):
-    """Run yapf for the tree."""
+def commitindex_lint_yapf(ctx):
+    """Run yapf"""
     run(
         'docker-compose'
         ' -f {project_root}/docker/docker-compose.yml'
@@ -147,20 +204,24 @@ def lint_yapf(ctx):
         ' py3-linter'
         ' yapf'
         ' --diff --recursive'
-        ' .'
+        ' commitindex'
         ''.format(project_root=project_root),
         pty=True,
         echo=True
     )
 
 
-@task(default=True, name='all', post=[lint_flake8, lint_yapf])
-def lint_all(ctx):
+@task(
+    default=True,
+    name='all',
+    post=[commitindex_lint_flake8, commitindex_lint_yapf]
+)
+def commitindex_lint_all(ctx):
     pass
 
 
-@task(name='yapf')
-def format_yapf(ctx):
+@task(default=True, name='all')
+def commitindex_format_all(ctx):
     run(
         'docker-compose'
         ' -f {project_root}/docker/docker-compose.yml'
@@ -169,13 +230,143 @@ def format_yapf(ctx):
         ' py3-linter'
         ' yapf'
         ' --in-place --recursive'
-        ' .'
+        ' commitindex'
         ''.format(project_root=project_root),
         echo=True
     )
 
 
-@task(default=True, name='all', post=[format_yapf])
+@task(name='flake8')
+def stagingrepo_lint_flake8(ctx):
+    """Run flake8"""
+    run(
+        'docker-compose'
+        ' -f {project_root}/docker/docker-compose.yml'
+        ' run'
+        ' --rm'
+        ' py3-linter'
+        ' flake8 commitindex'
+        ''.format(project_root=project_root),
+        pty=True,
+        echo=True
+    )
+
+
+@task(name='yapf')
+def stagingrepo_lint_yapf(ctx):
+    """Run yapf"""
+    run(
+        'docker-compose'
+        ' -f {project_root}/docker/docker-compose.yml'
+        ' run'
+        ' --rm'
+        ' py3-linter'
+        ' yapf'
+        ' --diff --recursive'
+        ' commitindex'
+        ''.format(project_root=project_root),
+        pty=True,
+        echo=True
+    )
+
+
+@task(
+    default=True,
+    name='all',
+    post=[stagingrepo_lint_flake8, stagingrepo_lint_yapf]
+)
+def stagingrepo_lint_all(ctx):
+    pass
+
+
+@task(default=True, name='all')
+def stagingrepo_format_all(ctx):
+    run(
+        'docker-compose'
+        ' -f {project_root}/docker/docker-compose.yml'
+        ' run'
+        ' --rm'
+        ' py2-linter'
+        ' yapf'
+        ' --in-place --recursive'
+        ' stagingrepo'
+        ''.format(project_root=project_root),
+        echo=True
+    )
+
+
+@task(name='flake8')
+def lint_tasks_flake8(ctx):
+    """Run flake8"""
+    run(
+        'docker-compose'
+        ' -f {project_root}/docker/docker-compose.yml'
+        ' run'
+        ' --rm'
+        ' py3-linter'
+        ' flake8 tasks.py'
+        ''.format(project_root=project_root),
+        pty=True,
+        echo=True
+    )
+
+
+@task(name='yapf')
+def lint_tasks_yapf(ctx):
+    """Run yapf"""
+    run(
+        'docker-compose'
+        ' -f {project_root}/docker/docker-compose.yml'
+        ' run'
+        ' --rm'
+        ' py3-linter'
+        ' yapf'
+        ' --diff --recursive'
+        ' tasks.py'
+        ''.format(project_root=project_root),
+        pty=True,
+        echo=True
+    )
+
+
+@task(default=True, name='all', post=[lint_tasks_yapf, lint_tasks_flake8])
+def lint_tasks_all(ctx):
+    pass
+
+
+@task(
+    default=True,
+    name='all',
+    post=[
+        lint_tasks_all, autoland_lint_all, commitindex_lint_all,
+        stagingrepo_lint_all
+    ]
+)
+def lint_all(ctx):
+    pass
+
+
+@task(name='tasks')
+def format_tasks(ctx):
+    run(
+        'docker-compose'
+        ' -f {project_root}/docker/docker-compose.yml'
+        ' run'
+        ' --rm'
+        ' py3-linter'
+        ' yapf'
+        ' --in-place --recursive'
+        ' tasks.py'
+        ''.format(project_root=project_root),
+        echo=True
+    )
+
+
+@task(
+    default=True,
+    name='all',
+    post=[autoland_format_all, commitindex_format_all, stagingrepo_format_all]
+)
 def format_all(ctx):
     """Auto format the code style (MODIFIES FILES!)."""
     pass
@@ -212,17 +403,57 @@ namespace = Collection(
             autoland_test_ui,
             autoland_remove_containers,
         ),
+        Collection(
+            'lint',
+            autoland_lint_all,
+            autoland_lint_flake8,
+            autoland_lint_yapf,
+        ),
+        Collection(
+            'format',
+            autoland_format_all,
+        ),
+    ),
+    Collection(
+        'commitindex',
+        Collection(
+            'lint',
+            commitindex_lint_all,
+            commitindex_lint_flake8,
+            commitindex_lint_yapf,
+        ),
+        Collection(
+            'format',
+            commitindex_format_all,
+        ),
+    ),
+    Collection(
+        'stagingrepo',
+        Collection(
+            'lint',
+            stagingrepo_lint_all,
+            stagingrepo_lint_flake8,
+            stagingrepo_lint_yapf,
+        ),
+        Collection(
+            'format',
+            stagingrepo_format_all,
+        ),
     ),
     Collection(
         'lint',
         lint_all,
-        lint_yapf,
-        lint_flake8,
+        Collection(
+            'tasks',
+            lint_tasks_all,
+            lint_tasks_yapf,
+            lint_tasks_flake8,
+        ),
     ),
     Collection(
         'format',
         format_all,
-        format_yapf,
+        format_tasks,
     ),
     Collection('test', test_all, test_style),
     version_json,
