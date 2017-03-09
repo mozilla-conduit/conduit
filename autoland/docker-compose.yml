@@ -30,7 +30,7 @@ services:
 
   mountebank:
     build:
-      context: docker/mountebank/
+      context: ../docker/mountebank/
     command: start --logfile /mb.log --debug --mock
 
   webapi:
