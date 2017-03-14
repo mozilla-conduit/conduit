@@ -12,6 +12,7 @@ services:
       - "8080:8080"
     volumes:
       - data-volume:/repos
+      - ./extensions:/hgext
       - ./docker/hgweb.conf:/etc/hg/hgweb.conf
     environment:
       - HG_RELEASE=4.1
