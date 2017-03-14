@@ -1,0 +1,94 @@
+swagger: '2.0'
+info:
+  title: Commit Index
+  description: Staging, Tracking, and Managing commits
+  version: "0.1.0"
+produces:
+  - application/json
+paths:
+  /iterations/:
+    get:
+      summary: Iterations of a Topic
+      description: |
+        The Iterations endpoint returns information about the iterations a
+        Topic has gone through. Each iteration is a set of commits which
+        represent a state of the work on the associated topic.
+      responses:
+        200:
+          description: OK
+        default:
+          description: Unexpected error
+          schema:
+            type: object
+            properties:
+              error:
+                $ref: '#/definitions/Error'
+    post:
+      summary: Create a new Iteration
+      parameters:
+        - name: commits
+          required: true
+          in: body
+          description: |
+            A comprehensive list of commits that make up the iteration being
+            created. These commits should form a single continuous DAG line
+            in the staging repositories history.
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/definitions/Iteration'
+        default:
+          description: Unexpected error
+          schema:
+            type: object
+            properties:
+              error:
+                $ref: '#/definitions/Error'
+definitions:
+  Commit:
+    type: object
+    properties:
+      id:
+        type: string
+        description: |
+          The global revision identifier of the commit (Most likely a
+          sha1 hash string, but may be a new format used by version
+          control in the future).
+  Iteration:
+    type: object
+    properties:
+      id:
+        type: integer
+        minimum: 0
+        description: |
+          A positive integer which uniquely identifies this iteration
+          globally accross all topics.
+      topic:
+        type: integer
+        minimum: 0
+        description: |
+          A positive integer which uniquely identifies a Topic.
+      commits:
+        type: array
+        minLength: 1
+        items:
+          $ref: '#/definitions/Commit'
+        description: |
+          A list of the commits which make up this iteration. An iteration
+          must contain at least 1 commit, but has no theoretical maximum.
+          A commit is not unique to a particular iteration.
+  Error:
+    type: object
+    properties:
+      message:
+        type: string
+        description: |
+          A human readable description of the error which occured.
