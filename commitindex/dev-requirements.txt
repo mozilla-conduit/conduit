@@ -1,0 +1,6 @@
+py==1.4.32 \
+    --hash=sha256:2d4bba2e25fff58140e6bdce1e485e89bb59776adbe01d490baa6b1f37a3dd6b
+
+pytest==3.0.6 \
+    --hash=sha256:da0ab50c7eec0683bc24f1c1137db1f4111752054ecdad63125e7ec71316b813 \
+    --hash=sha256:643434a9f1a188271da35e20064cb8b6c5440976c5bb541dc7b5b0e3cf75d940
