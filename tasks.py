@@ -245,7 +245,7 @@ def stagingrepo_lint_flake8(ctx):
         ' run'
         ' --rm'
         ' py3-linter'
-        ' flake8 commitindex'
+        ' flake8 stagingrepo'
         ''.format(project_root=project_root),
         pty=True,
         echo=True
@@ -263,7 +263,7 @@ def stagingrepo_lint_yapf(ctx):
         ' py3-linter'
         ' yapf'
         ' --diff --recursive'
-        ' commitindex'
+        ' stagingrepo'
         ''.format(project_root=project_root),
         pty=True,
         echo=True
