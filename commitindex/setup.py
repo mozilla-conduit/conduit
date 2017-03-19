@@ -33,5 +33,8 @@ setup(
     packages=find_packages(exclude=['docs', 'tests']),
     install_requires=[],
     extras_require={},
-    entry_points={},
+    entry_points={
+        'console_scripts':
+        ['commitindex-dev = commitindex.commitindex:development_server']
+    },
 )

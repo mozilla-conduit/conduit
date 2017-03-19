@@ -6,6 +6,16 @@ info:
 produces:
   - application/json
 paths:
+  /:
+    get:
+      summary: Redirect to the API UI and documentation
+      responses:
+        302:
+          description: Redirect to the UI
+          headers:
+            Location:
+              description: Where to redirect to
+              type: string
   /iterations/:
     get:
       summary: Iterations of a Topic

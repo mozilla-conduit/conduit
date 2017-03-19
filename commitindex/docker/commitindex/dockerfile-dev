@@ -8,4 +8,9 @@ RUN pip install -r /dev-requirements.txt
 ADD . /app
 WORKDIR /app
 
-CMD ["python"]
+# We install outside of the app directory to create the .egg-info in a
+# location that will not be mounted over. This means /app needs to be
+# added to PYTHONPATH though.
+ENV PYTHONPATH /app
+RUN cd / && python /app/setup.py develop
+CMD ["commitindex-dev"]

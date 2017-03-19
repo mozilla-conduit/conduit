@@ -13,7 +13,10 @@ services:
     depends_on:
       - mountebank
     ports:
-      - "8888:80"
+      - "8888:8888"
+    environment:
+      - PORT=8888
+      - DEBUG=1
 
   mountebank:
     build:
