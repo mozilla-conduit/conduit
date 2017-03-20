@@ -1,0 +1,6 @@
+[ui]
+username = Wavid Dalsh <wdalsh@mozilla.com>
+
+[extensions]
+reviewboard = /root/version-control-tools/hgext/reviewboard/client.py
+conduit = /root/version-control-tools/hgext/conduit-client/client.py

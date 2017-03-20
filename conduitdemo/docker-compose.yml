@@ -1,0 +1,60 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+version: '2'
+services:
+
+  demo:
+    build:
+      context: ./docker-vct-hg
+      dockerfile: ./Dockerfile
+    environment:
+      - HG_RELEASE=4.1
+
+  ## staginghgserver
+  hgserver:
+    build:
+      context: ../staginghgserver/docker
+      dockerfile: ./Dockerfile
+    volumes:
+      - data-volume:/repos
+      - ../staginghgserver/extensions:/hgext
+      - ../staginghgserver/docker/hgweb.conf:/etc/hg/hgweb.conf
+    environment:
+      - HG_RELEASE=4.1
+      - HG_WEB_CONF=/etc/hg/hgweb.conf
+    depends_on:
+      - hgrepoinit
+
+  hgrepoinit:
+    build:
+      context: ../staginghgserver/docker
+      dockerfile: ./Dockerfile
+    volumes:
+      - data-volume:/repos
+    environment:
+      - HG_RELEASE=4.1
+      - HG_WEB_CONF=/etc/hg/hgweb.conf
+    entrypoint:
+      - hg
+      - init
+      - /repos/testrepo
+
+  ## commitindex
+  commitindex:
+    build:
+      context: ../commitindex
+      dockerfile: ./docker/commitindex/dockerfile-dev
+    volumes:
+      - ./:/app
+    depends_on:
+      - mountebank
+
+  mountebank:
+    build:
+      context: ../docker/mountebank/
+    command: start --logfile /mb.log --debug --mock
+
+volumes:
+  data-volume:
