@@ -29,10 +29,8 @@ paths:
         default:
           description: Unexpected error
           schema:
-            type: object
-            properties:
-              error:
-                $ref: '#/definitions/Error'
+            allOf:
+              - $ref: '#/definitions/Error'
     post:
       summary: Create a new Iteration
       parameters:
@@ -58,10 +56,8 @@ paths:
         default:
           description: Unexpected error
           schema:
-            type: object
-            properties:
-              error:
-                $ref: '#/definitions/Error'
+            allOf:
+              - $ref: '#/definitions/Error'
 definitions:
   Commit:
     type: object
@@ -95,10 +91,19 @@ definitions:
           A list of the commits which make up this iteration. An iteration
           must contain at least 1 commit, but has no theoretical maximum.
           A commit is not unique to a particular iteration.
+  # RFS7807 Problem Details for HTTP APIs (https://tools.ietf.org/html/rfc7807)
+  # is used for error messages. Extensions to the error can be speced using an
+  # "allOf" schema keyword along with additional schema definition
   Error:
     type: object
     properties:
-      message:
+      status:
+        type: integer
+      type:
         type: string
-        description: |
-          A human readable description of the error which occured.
+      title:
+        type: string
+      detail:
+        type: string
+      instance:
+        type: string
