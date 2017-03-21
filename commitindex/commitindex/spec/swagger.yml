@@ -58,6 +58,32 @@ paths:
           schema:
             allOf:
               - $ref: '#/definitions/Error'
+  /iterations/{id}:
+    get:
+      parameters:
+        - name: id
+          in: path
+          type: integer
+          description: ID of the iteration
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/definitions/Iteration'
+        404:
+          description: Iteration does not exist
+          schema:
+            allOf:
+              - $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error
+          schema:
+            allOf:
+              - $ref: '#/definitions/Error'
 definitions:
   Commit:
     type: object
