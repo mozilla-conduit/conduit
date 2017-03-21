@@ -15,8 +15,8 @@ services:
   ## staginghgserver
   hgserver:
     build:
-      context: ../staginghgserver/docker
-      dockerfile: ./Dockerfile
+      context: ../staginghgserver
+      dockerfile: ./docker/Dockerfile
     volumes:
       - data-volume:/repos
       - ../staginghgserver/extensions:/hgext
@@ -29,8 +29,8 @@ services:
 
   hgrepoinit:
     build:
-      context: ../staginghgserver/docker
-      dockerfile: ./Dockerfile
+      context: ../staginghgserver
+      dockerfile: ./docker/Dockerfile
     volumes:
       - data-volume:/repos
     environment:
