@@ -5,19 +5,19 @@ ENV HG_RELEASE=4.1 \
 
 RUN mkdir -p /etc/hg
 
-RUN apk --no-cache add python
+RUN apk --no-cache add python py-pip
 RUN apk --no-cache add --virtual build-dependencies \
       build-base \
       python-dev \
-      py-pip \
     && pip install --no-cache mercurial==$HG_RELEASE \
     && apk del build-dependencies
 
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+ADD dev-requirements.txt /dev-requirements.txt
+RUN pip install -r /dev-requirements.txt
 
 VOLUME ["/repos"]
 
 EXPOSE 8080
 
-ENTRYPOINT ["/entrypoint.sh"]
+WORKDIR /repos
+CMD exec hg serve --port 8080 --web-conf ${HG_WEB_CONF}

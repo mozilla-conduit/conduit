@@ -6,8 +6,8 @@ version: '2'
 services:
   hgserver:
     build:
-      context: ./docker
-      dockerfile: ./Dockerfile
+      context: ./
+      dockerfile: ./docker/Dockerfile
     ports:
       - "8080:8080"
     volumes:
@@ -22,8 +22,8 @@ services:
 
   hgrepoinit:
     build:
-      context: ./docker
-      dockerfile: ./Dockerfile
+      context: ./
+      dockerfile: ./docker/Dockerfile
     volumes:
       - data-volume:/repos
     environment:
