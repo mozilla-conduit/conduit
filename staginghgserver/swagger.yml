@@ -1,0 +1,61 @@
+swagger: '2.0'
+
+info:
+  version: "0.1.0"
+  title: Conduit Hg Server Web Extension
+
+paths:
+  /stage:
+    post:
+      description: |
+        Creates a new Iteration on a Topic using a series of commits
+      parameters:
+        - name: bugzilla_username
+          in: formData
+          required: true
+          type: string
+        - name: bugzilla_api_key
+          in: formData
+          required: true
+          type: string
+        - name: commit_ids
+          in: formData
+          type: array
+          items:
+            type: string
+          minLength: 1
+      responses:
+        200:
+          description: Successfully created new iteration
+          schema:
+            type: object
+            properties:
+              message:
+                # TODO figure out best response type
+                description: Brief message to give to the user
+                type: string
+        default:
+          description: An Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+definitions:
+  Error:
+    description: |
+      An error message in the RFC7807 format.
+    type: object
+    properties:
+      type:
+        description: A URI that describes this type of error, or about:blank
+        type: string
+      title:
+        description: A short human-readable name for the error
+        type: string
+      status:
+        description: The HTTP status code returned with this error
+        type: integer
+      detail:
+        description: Human-readable text describing what went wrong
+        type: string
+      instance:
+        description: A unqiue URI for this error, or about:blank
+        type: string

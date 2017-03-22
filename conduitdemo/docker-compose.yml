@@ -9,8 +9,6 @@ services:
     build:
       context: ./docker-vct-hg
       dockerfile: ./Dockerfile
-    environment:
-      - HG_RELEASE=4.1
 
   ## staginghgserver
   hgserver:
@@ -22,8 +20,7 @@ services:
       - ../staginghgserver/extensions:/hgext
       - ../staginghgserver/docker/hgweb.conf:/etc/hg/hgweb.conf
     environment:
-      - HG_RELEASE=4.1
-      - HG_WEB_CONF=/etc/hg/hgweb.conf
+      - COMMIT_INDEX_URL=http://commitindex
     depends_on:
       - hgrepoinit
 
@@ -33,9 +30,6 @@ services:
       dockerfile: ./docker/Dockerfile
     volumes:
       - data-volume:/repos
-    environment:
-      - HG_RELEASE=4.1
-      - HG_WEB_CONF=/etc/hg/hgweb.conf
     entrypoint:
       - hg
       - init
@@ -47,9 +41,13 @@ services:
       context: ../commitindex
       dockerfile: ./docker/commitindex/dockerfile-dev
     volumes:
-      - ./:/app
+      - ../commitindex:/app
     depends_on:
-      - mountebank
+      - bmo
+    environment:
+      - PORT=80
+      - DEBUG=1
+      - BUGZILLA_URL=http://bmo
 
   mountebank:
     build:

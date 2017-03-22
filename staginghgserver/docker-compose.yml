@@ -13,10 +13,10 @@ services:
     volumes:
       - data-volume:/repos
       - ./extensions:/hgext
+      - ./tests:/tests
       - ./docker/hgweb.conf:/etc/hg/hgweb.conf
     environment:
-      - HG_RELEASE=4.1
-      - HG_WEB_CONF=/etc/hg/hgweb.conf
+      - COMMIT_INDEX_URL=http://commitindex:8888
     depends_on:
       - hgrepoinit
 
@@ -26,9 +26,6 @@ services:
       dockerfile: ./docker/Dockerfile
     volumes:
       - data-volume:/repos
-    environment:
-      - HG_RELEASE=4.1
-      - HG_WEB_CONF=/etc/hg/hgweb.conf
     entrypoint:
       - hg
       - init

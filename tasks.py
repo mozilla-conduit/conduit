@@ -294,6 +294,63 @@ def stagingrepo_format_all(ctx):
         echo=True
     )
 
+@task(name='flake8')
+def staginghgserver_lint_flake8(ctx):
+    """Run flake8"""
+    run(
+        'docker-compose'
+        ' -f {project_root}/docker/docker-compose.yml'
+        ' run'
+        ' --rm'
+        ' py2-linter'
+        ' flake8 staginghgserver'
+        ''.format(project_root=project_root),
+        pty=True,
+        echo=True
+    )
+
+
+@task(name='yapf')
+def staginghgserver_lint_yapf(ctx):
+    """Run yapf"""
+    run(
+        'docker-compose'
+        ' -f {project_root}/docker/docker-compose.yml'
+        ' run'
+        ' --rm'
+        ' py2-linter'
+        ' yapf'
+        ' --diff --recursive'
+        ' staginghgserver'
+        ''.format(project_root=project_root),
+        pty=True,
+        echo=True
+    )
+
+
+@task(
+    default=True,
+    name='all',
+    post=[staginghgserver_lint_flake8, staginghgserver_lint_yapf]
+)
+def staginghgserver_lint_all(ctx):
+    pass
+
+
+@task(default=True, name='all')
+def staginghgserver_format_all(ctx):
+    run(
+        'docker-compose'
+        ' -f {project_root}/docker/docker-compose.yml'
+        ' run'
+        ' --rm'
+        ' py2-linter'
+        ' yapf'
+        ' --in-place --recursive'
+        ' staginghgserver'
+        ''.format(project_root=project_root),
+        echo=True
+    )
 
 @task(name='flake8')
 def lint_tasks_flake8(ctx):
@@ -438,6 +495,19 @@ namespace = Collection(
         Collection(
             'format',
             stagingrepo_format_all,
+        ),
+    ),
+    Collection(
+        'staginghgserver',
+        Collection(
+            'lint',
+            staginghgserver_lint_all,
+            staginghgserver_lint_flake8,
+            staginghgserver_lint_yapf,
+        ),
+        Collection(
+            'format',
+            staginghgserver_format_all,
         ),
     ),
     Collection(
