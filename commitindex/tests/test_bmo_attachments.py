@@ -1,7 +1,6 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
-
 """
 Mountebank test cases for commit-index
 """
@@ -14,6 +13,7 @@ import pytest
 
 class FakeBugzilla:
     """Setups up the imposter test double emulating Bugzilla"""
+
     def __init__(self, mountebank_client):
 
         self.mountebank = mountebank_client
@@ -32,28 +32,32 @@ class FakeBugzilla:
         self.mountebank.create_stub(
             [
                 {
-                    "predicates": [{
-                        "equals": {
-                            "method": "POST",
-                            "headers": {
-                                "Content-Type": "application/json"
-                            },
-                            "path": path
+                    "predicates": [
+                        {
+                            "equals": {
+                                "method": "POST",
+                                "headers": {
+                                    "Content-Type": "application/json"
+                                },
+                                "path": path
+                            }
                         }
-                    }],
-                    "responses": [{
-                        "is": {
-                            "statusCode": 200,
-                            "headers": {
-                                "Content-Type": "application/json"
-                            },
-                            "body": {
-                                "attachments": {
-                                    12345: {}
+                    ],
+                    "responses": [
+                        {
+                            "is": {
+                                "statusCode": 200,
+                                "headers": {
+                                    "Content-Type": "application/json"
+                                },
+                                "body": {
+                                    "attachments": {
+                                        12345: {}
+                                    }
                                 }
                             }
                         }
-                    }]
+                    ]
                 },
                 # 404 everything else
                 {
@@ -108,13 +112,20 @@ def test_create_valid_attachment(bugzilla):
     """Tests adding an attachment to the Bugzilla service"""
 
     attach_data = {
-        "is_patch": False,
-        "comment": "This is a new attachment comment",
-        "summary": "Test Attachment",
-        "content_type": "text/plain",
-        "data": "data to be encoded",
-        "file_name": "test_attachment.patch",
-        "is_private": False,
+        "is_patch":
+        False,
+        "comment":
+        "This is a new attachment comment",
+        "summary":
+        "Test Attachment",
+        "content_type":
+        "text/plain",
+        "data":
+        "data to be encoded",
+        "file_name":
+        "test_attachment.patch",
+        "is_private":
+        False,
         "flags": [
             {
                 "name": "review",
