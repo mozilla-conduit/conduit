@@ -17,6 +17,7 @@ services:
     environment:
       - PORT=8888
       - DEBUG=1
+      - BUGZILLA_URL=http://mountebank:4000
 
   mountebank:
     build:

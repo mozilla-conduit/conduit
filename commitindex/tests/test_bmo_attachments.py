@@ -5,10 +5,18 @@
 Mountebank test cases for commit-index
 """
 
+import requests
+
+from commitindex.commitindex import app
+from commitindex.reviews import triggers
 from commitindex.reviews.bugzilla import Bugzilla
+from commitindex.reviews.triggers import get_bugzilla_client, trigger_review
 from testing import MountebankClient
 
 import pytest
+from unittest.mock import MagicMock, call
+
+from flask import current_app
 
 
 class FakeBugzilla:
@@ -140,3 +148,37 @@ def test_create_valid_attachment(bugzilla):
     bug_test = Bugzilla(rest_url=bugzilla.url)
     result = bug_test.create_attachment(1234, attach_data, '12345')
     assert result == 12345
+
+
+def test_trigger_review_creates_attachment_for_each_commit(monkeypatch):
+    """Tests that a new bugzilla attachment is created for each commit"""
+    commits = [{"id": "1"}, {"id": "1"}, {"id": "1"}]
+
+    bugzilla = MagicMock()
+
+    def get_bugzilla_stub():
+        return bugzilla
+
+    monkeypatch.setattr(
+        "commitindex.reviews.triggers.get_bugzilla_client",
+        get_bugzilla_stub
+    )
+
+    trigger_review(commits)
+
+    expected_calls = [
+        call.create_attachment(1, commits[0]),
+        call.create_attachment(1, commits[1]),
+        call.create_attachment(1, commits[2]),
+    ]
+
+    assert bugzilla.mock_calls == expected_calls
+
+
+def test_bugzilla_client_properly_created():
+    """Tests that a bugzilla client is properly created with URL"""
+    bugzilla_url = 'http://blah/'
+    with app.app.app_context():
+        current_app.config['BUGZILLA_URL'] = bugzilla_url
+        client = triggers.get_bugzilla_client()
+        assert client.rest_url == bugzilla_url
