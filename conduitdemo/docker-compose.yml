@@ -56,5 +56,10 @@ services:
       context: ../docker/mountebank/
     command: start --logfile /mb.log --debug --mock
 
+  bmo:
+    build:
+      context: ../bmo
+      dockerfile: ./docker/dockerfile-dev
+
 volumes:
   data-volume:
