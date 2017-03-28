@@ -43,7 +43,8 @@ class FakeBugzilla:
                             "equals": {
                                 "method": "POST",
                                 "headers": {
-                                    "Content-Type": "application/json"
+                                    "Content-Type": "application/json",
+                                    "Accept": "aplication/json"
                                 },
                                 "path": path
                             }
