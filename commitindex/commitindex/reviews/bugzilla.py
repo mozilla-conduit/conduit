@@ -67,7 +67,7 @@ class Bugzilla(object):
             )
 
         try:
-            data = json.loads(response.content.decode('utf-8'))
+            data = json.loads(response.content.decode())
         except:
             raise BugzillaError("Error decoding JSON data", 400)
 
