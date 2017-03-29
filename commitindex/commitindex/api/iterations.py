@@ -22,19 +22,28 @@ def get(id):
     )
 
 
-def post(commits):
+def post(data):
+    """
+    data:
+        - commits: (array of strings): required
+        - topic: (integer): optional
+    """
     # TODO: Validate the passed commits form a single linear DAG line.
     # TODO: Create and persist a real iteration.
 
+    topic = data.get('topic', 1)
+
+    # TODO: Topic lookup and validation
+
     # Trigger review creation for this iteration.
-    trigger_review(commits)
+    trigger_review(data['commits'])
 
     return {
         'data': {
             'id': 1,
-            'topic': 1,
+            'topic': topic,
             'commits': [{
                 'id': commit
-            } for commit in commits],
+            } for commit in data['commits']],
         },
     }, 200

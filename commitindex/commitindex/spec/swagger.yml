@@ -34,7 +34,7 @@ paths:
     post:
       summary: Create a new Iteration
       parameters:
-        - name: commits
+        - name: data
           required: true
           in: body
           description: |
@@ -42,9 +42,16 @@ paths:
             created. These commits should form a single continuous DAG line
             in the staging repositories history.
           schema:
-            type: array
-            items:
-              type: string
+            type: object
+            required:
+              - commits
+            properties:
+              commits:
+                type: array
+                items:
+                  type: string
+              topic:
+                type: integer
       responses:
         200:
           description: OK
