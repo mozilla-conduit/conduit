@@ -17,12 +17,12 @@ app.add_api('swagger.yml', resolver=RestyResolver('commitindex.api'))
 )
 @click.option('--debug', envvar='DEBUG', is_flag=True)
 @click.option('--port', envvar='PORT', default=8888)
-def development_server(debug, port):
+def development_server(bugzilla_url, debug, port):
     """Run the commitindex development server.
 
     This server should not be used for production deployments. Instead
     the commitindex should be served by an external webserver as a wsgi
     app.
     """
-    app.config['BUGZILLA_URL'] = os.environ['BUGZILLA_URL']
+    app.app.config['BUGZILLA_URL'] = bugzilla_url
     app.run(debug=debug, port=port, host='0.0.0.0')
