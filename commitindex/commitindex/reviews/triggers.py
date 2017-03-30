@@ -15,11 +15,12 @@ def trigger_review(commits):
 
     for commit in commits:
         # TODO: Create real diff
-        commit['data'] = """diff --git a/dirs/source.py b/dirs/source.py
+        commit_data = {}
+        commit_data['data'] = """diff --git a/dirs/source.py b/dirs/source.py
 --- a/dirs/source.py
 +++ b/dirs/source.py
 @@ -1,8 +1,17 @@
 
 +from commitindex.reviews.bugzilla import Bugzilla"""
 
-        diff_id = get_bugzilla_client().create_attachment(1, commit)
+        diff_id = get_bugzilla_client().create_attachment(1, commit_data)
