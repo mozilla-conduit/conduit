@@ -19,5 +19,6 @@ mysql -u root mysql -e "CREATE DATABASE bugs CHARACTER SET = 'utf8';"
 perl checksetup.pl checksetup_answers.txt
 perl checksetup.pl checksetup_answers.txt
 perl scripts/generate_bmo_data.pl
+generate_conduit_data.pl
 
 mysqladmin -u root shutdown

@@ -70,7 +70,7 @@ class Bugzilla(object):
         try:
             data = json.loads(response.content.decode('utf-8'))
         except:
-            raise BugzillaError(400, "Error decoding JSON data")
+            raise BugzillaError("Error decoding JSON data", 400)
 
         if isinstance(data, dict) and 'error' in data:
             raise BugzillaError(data['message'], data['code'])
@@ -94,7 +94,7 @@ class Bugzilla(object):
         """
 
         try:
-            self.call('GET', '/bug/' + quote(str(bug_id)))
+            self.call('GET', '/rest/bug/' + quote(str(bug_id)))
         except BugzillaError as error:
             if error.fault_code == 102:
                 return True
@@ -126,7 +126,7 @@ class Bugzilla(object):
 
         try:
             self.call(
-                'GET', '/valid_login', data=params, api_key=quote(api_key)
+                'GET', '/rest/valid_login', data=params, api_key=quote(api_key)
             )
         except BugzillaError as error:
             if error.fault_code == 306:
@@ -157,7 +157,7 @@ class Bugzilla(object):
         try:
             result = self.call(
                 'POST',
-                '/bug/' + quote(str(bug_id)) + '/attachment',
+                '/rest/bug/' + quote(str(bug_id)) + '/attachment',
                 api_key=api_key,
                 data=attach_data
             )

@@ -8,6 +8,10 @@
 FROM mozillabteam/bmo-ci
 MAINTAINER David Lawrence <dkl@mozilla.com>
 
+ENV CONDUIT_LOGIN conduit@mozilla.bugs
+ENV CONDUIT_PASSWORD password
+ENV CONDUIT_API_KEY zQ5TSBzq7tTZMtKYq9K1ZqJMjifKx3cPL7pIGk9Q
+
 # Supervisor setup
 COPY docker/conf/supervisord.conf /etc/supervisord.conf
 RUN chmod 700 /etc/supervisord.conf
