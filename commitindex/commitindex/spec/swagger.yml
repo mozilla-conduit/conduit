@@ -34,6 +34,16 @@ paths:
     post:
       summary: Create a new Iteration
       parameters:
+        - name: X-Bugzilla-API-Key
+          required: true
+          in: header
+          description: The API key required to interact with Bugzilla
+          type: string
+        - name: X-Bugzilla-Login
+          required: true
+          in: header
+          description: The Bugzilla Username
+          type: string
         - name: data
           required: true
           in: body
@@ -60,6 +70,11 @@ paths:
             properties:
               data:
                 $ref: '#/definitions/Iteration'
+        401:
+          description: Invalid Bugzilla header values
+          schema:
+            allOf:
+              - $ref: '#/definitions/Error'
         default:
           description: Unexpected error
           schema:

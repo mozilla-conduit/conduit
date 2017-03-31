@@ -2,16 +2,19 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-from commitindex.reviews.bugzilla import Bugzilla
 from flask import current_app
+
+from commitindex.reviews.bugzilla import Bugzilla
 
 
 def get_bugzilla_client():
     return Bugzilla(rest_url=current_app.config['BUGZILLA_URL'])
 
 
-def trigger_review(commits):
+def trigger_review(commits, api_key):
     """Trigger review creation for an Iteration."""
+
+    bugzilla = get_bugzilla_client()
 
     for commit in commits:
         # TODO: Create real diff
@@ -23,8 +26,8 @@ def trigger_review(commits):
 
 +from commitindex.reviews.bugzilla import Bugzilla"""
 
-        commit['attachment_id'] = get_bugzilla_client().create_attachment(
-            1, commit_data
+        commit['attachment_id'] = bugzilla.create_attachment(
+            1, commit_data, api_key=api_key
         )
 
     return commits
