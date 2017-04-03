@@ -5,12 +5,10 @@
 Mountebank test cases for commit-index
 """
 
-import requests
-
 from commitindex.commitindex import app
 from commitindex.reviews import triggers
 from commitindex.reviews.bugzilla import Bugzilla
-from commitindex.reviews.triggers import get_bugzilla_client, trigger_review
+from commitindex.reviews.triggers import trigger_review
 from testing import MountebankClient
 
 import pytest
@@ -160,8 +158,7 @@ def test_trigger_review_creates_attachment_for_each_commit(monkeypatch):
         return bugzilla
 
     monkeypatch.setattr(
-        "commitindex.reviews.triggers.get_bugzilla_client",
-        get_bugzilla_stub
+        "commitindex.reviews.triggers.get_bugzilla_client", get_bugzilla_stub
     )
 
     trigger_review(commits)

@@ -23,4 +23,8 @@ def trigger_review(commits):
 
 +from commitindex.reviews.bugzilla import Bugzilla"""
 
-        diff_id = get_bugzilla_client().create_attachment(1, commit_data)
+        commit['attachment_id'] = get_bugzilla_client().create_attachment(
+            1, commit_data
+        )
+
+    return commits

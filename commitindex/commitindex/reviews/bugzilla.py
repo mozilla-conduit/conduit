@@ -9,7 +9,6 @@ import logging
 import requests
 from base64 import b64encode
 
-
 logger = logging.getLogger(__name__)
 
 

@@ -294,6 +294,7 @@ def stagingrepo_format_all(ctx):
         echo=True
     )
 
+
 @task(name='flake8')
 def staginghgserver_lint_flake8(ctx):
     """Run flake8"""
@@ -351,6 +352,7 @@ def staginghgserver_format_all(ctx):
         ''.format(project_root=project_root),
         echo=True
     )
+
 
 @task(name='flake8')
 def lint_tasks_flake8(ctx):
