@@ -19,7 +19,7 @@ RUN pip install --no-cache -r /dev-requirements.txt
 
 VOLUME ["/repos"]
 
-EXPOSE 8080
+EXPOSE 80
 
 WORKDIR /repos
-CMD exec hg serve --port 8080 --web-conf ${HG_WEB_CONF}
+CMD exec hg serve --port 80 --web-conf ${HG_WEB_CONF}
