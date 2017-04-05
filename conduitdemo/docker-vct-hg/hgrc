@@ -6,6 +6,6 @@ reviewboard = /root/version-control-tools/hgext/reviewboard/client.py
 conduit = /root/version-control-tools/hgext/conduit-client/client.py
 
 [bugzilla]
-username = test@example.com
+username = conduit@mozilla.bugs
 # Not a real api key
-apikey = EHdrFyax9Jz2N4hucP3YWxmxcwJqMbw8R6q4ZRv5
+apikey = zQ5TSBzq7tTZMtKYq9K1ZqJMjifKx3cPL7pIGk9Q

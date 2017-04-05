@@ -15,10 +15,13 @@ def trigger_review(commits, api_key):
     """Trigger review creation for an Iteration."""
 
     bugzilla = get_bugzilla_client()
-
+    attachments = []
     for commit in commits:
         # TODO: Create real diff
         commit_data = {}
+        commit_data['file_name'] = 'conduit test patch'
+        commit_data['is_patch'] = True
+        commit_data['summary'] = 'This is a test attachment from conduit'
         commit_data['data'] = """diff --git a/dirs/source.py b/dirs/source.py
 --- a/dirs/source.py
 +++ b/dirs/source.py
@@ -26,8 +29,8 @@ def trigger_review(commits, api_key):
 
 +from commitindex.reviews.bugzilla import Bugzilla"""
 
-        commit['attachment_id'] = bugzilla.create_attachment(
+        attachments.append(bugzilla.create_attachment(
             1, commit_data, api_key=api_key
-        )
+        ))
 
-    return commits
+    return attachments

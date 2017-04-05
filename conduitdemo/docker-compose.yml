@@ -58,6 +58,8 @@ services:
     build:
       context: ../bmo
       dockerfile: ./docker/dockerfile-dev
+    ports:
+      - "7777:80"
 
 volumes:
   data-volume:

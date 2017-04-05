@@ -46,7 +46,7 @@ def post(data):
     # TODO: Topic lookup and validation
 
     # Trigger review creation for this iteration.
-    trigger_review(data['commits'], request.header['X-Bugzilla-API-Key'])
+    trigger_review(data['commits'], request.headers['X-Bugzilla-API-Key'])
 
     return {
         'data': {
