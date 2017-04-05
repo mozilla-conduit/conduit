@@ -10,14 +10,17 @@ paths:
       description: |
         Creates a new Iteration on a Topic using a series of commits
       parameters:
-        - name: bugzilla_username
-          in: formData
+        - name: X-Bugzilla-Login
+          in: header
           required: true
           type: string
-        - name: bugzilla_api_key
-          in: formData
+        - name: X-Bugzilla-API-Key
+          in: header
           required: true
           type: string
+        - name: topic
+          in: formData
+          type: integer
         - name: commit_ids
           in: formData
           type: array

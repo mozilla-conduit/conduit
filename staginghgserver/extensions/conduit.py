@@ -29,12 +29,21 @@ def stage(web, req, tmpl):
     """Proxy to the commit index to stage commits."""
     post_iteration_url = '%s/iterations/' % COMMIT_INDEX_URL
     try:
-        iteration_res = requests.post(post_iteration_url,
-                                      json={'commits': req.form['commit_ids']})
+        headers = {
+            'X-Bugzilla-Login': req.env.get('HTTP_X_BUGZILLA_LOGIN', None),
+            'X-Bugzilla-API-Key': req.env.get('HTTP_X_BUGZILLA_API_KEY', None),
+        }
+        body = {'commits': req.form.get('commit_ids', None)}
+        if req.form.get('topic'):
+            body['topic'] = req.form.get('topic')
+
+        iteration_res = requests.post(post_iteration_url, headers=headers,
+                                      json=body, timeout=15)
         data = iteration_res.json()['data']
         commits_list = ', '.join(c['id'] for c in data['commits'])
         message = ('Successfully made Iteration id=%d on Topic id=%d with '
-                   'commits: [%s]') % (data['id'], data['topic'], commits_list)
+                   'commits: [%s]\n') \
+            % (data['id'], data['topic'], commits_list)
         response = json.dumps({'message': message})
         req.respond(HTTP_OK, 'application/json')
     except:
