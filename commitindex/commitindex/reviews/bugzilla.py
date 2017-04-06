@@ -125,7 +125,10 @@ class Bugzilla(object):
 
         try:
             self.call(
-                'GET', '/rest/valid_login', data=params, api_key=quote(api_key)
+                'GET',
+                '/rest/valid_login',
+                data=params,
+                api_key=quote(api_key)
             )
         except BugzillaError as error:
             if error.fault_code == 306:

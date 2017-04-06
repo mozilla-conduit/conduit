@@ -7,5 +7,4 @@ conduit = /root/version-control-tools/hgext/conduit-client/client.py
 
 [bugzilla]
 username = conduit@mozilla.bugs
-# Not a real api key
 apikey = zQ5TSBzq7tTZMtKYq9K1ZqJMjifKx3cPL7pIGk9Q

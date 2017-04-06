@@ -15,7 +15,7 @@ def trigger_review(commits, api_key):
     """Trigger review creation for an Iteration."""
 
     bugzilla = get_bugzilla_client()
-    attachments = []
+    results = []
     for commit in commits:
         # TODO: Create real diff
         commit_data = {}
@@ -29,8 +29,9 @@ def trigger_review(commits, api_key):
 
 +from commitindex.reviews.bugzilla import Bugzilla"""
 
-        attachments.append(bugzilla.create_attachment(
+        attachment_id = bugzilla.create_attachment(
             1, commit_data, api_key=api_key
-        ))
+        )
+        results.append({'commit': commit, 'attachment_id': attachment_id})
 
-    return attachments
+    return results
