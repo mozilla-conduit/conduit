@@ -7,7 +7,7 @@ services:
 
   demo:
     build:
-      context: ./docker-vct-hg
+      context: docker/vct-hg
       dockerfile: ./Dockerfile
 
   ## staginghgserver
@@ -56,7 +56,7 @@ services:
 
   bmo:
     build:
-      context: ../bmo
+      context: docker/bmo
       dockerfile: ./docker/dockerfile-dev
     ports:
       - "7777:80"
