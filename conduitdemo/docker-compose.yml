@@ -57,7 +57,7 @@ services:
   bmo:
     build:
       context: docker/bmo
-      dockerfile: ./docker/dockerfile-dev
+      dockerfile: Dockerfile
     ports:
       - "7777:80"
 

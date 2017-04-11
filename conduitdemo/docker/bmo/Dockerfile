@@ -13,14 +13,14 @@ ENV CONDUIT_PASSWORD password
 ENV CONDUIT_API_KEY zQ5TSBzq7tTZMtKYq9K1ZqJMjifKx3cPL7pIGk9Q
 
 # Supervisor setup
-COPY docker/conf/supervisord.conf /etc/supervisord.conf
+COPY conf/supervisord.conf /etc/supervisord.conf
 RUN chmod 700 /etc/supervisord.conf
 
 # Apache configuration
-COPY docker/conf/bugzilla.conf /etc/httpd/conf.d/bugzilla.conf
+COPY conf/bugzilla.conf /etc/httpd/conf.d/bugzilla.conf
 
 # Copy setup scripts
-COPY docker/scripts/* /usr/local/bin/
+COPY scripts/* /usr/local/bin/
 RUN chmod 755 /usr/local/bin/*
 
 # Apache fixes
@@ -31,7 +31,7 @@ RUN sed -e "s?^Group apache?Group $BUGZILLA_USER?" --in-place /etc/httpd/conf/ht
 RUN rm -rf $BUGZILLA_ROOT \
     && git clone $GITHUB_BASE_GIT -b $GITHUB_BASE_BRANCH $BUGZILLA_ROOT \
     && ln -sf $BUGZILLA_LIB $BUGZILLA_ROOT/local
-COPY docker/conf/checksetup_answers.txt $BUGZILLA_ROOT/checksetup_answers.txt
+COPY conf/checksetup_answers.txt $BUGZILLA_ROOT/checksetup_answers.txt
 RUN bugzilla_config.sh
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
