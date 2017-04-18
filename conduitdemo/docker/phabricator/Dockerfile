@@ -28,7 +28,9 @@ RUN apk --no-cache --update add \
     libjpeg-turbo \
     libmcrypt \
     libpng \
-    mariadb-client-libs
+    mariadb-client-libs \
+    py-pygments \
+    mercurial
 
 # Build PHP extensions
 RUN apk --no-cache add --virtual build-dependencies \
@@ -77,6 +79,7 @@ RUN { \
 # in the application).
 RUN { \
         echo 'always_populate_raw_post_data=-1'; \
+        echo 'post_max_size="32M"'; \
     } | tee /usr/local/etc/php/conf.d/phabricator.ini
 
 WORKDIR /var/www/html

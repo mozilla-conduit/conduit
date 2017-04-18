@@ -95,6 +95,7 @@ services:
     image: mysql:5.5
     volumes:
       - phabricator-mysql-db:/var/lib/mysql
+      - ./docker/phabricator/mysql:/etc/mysql/conf.d:ro
     environment:
       - MYSQL_ROOT_PASSWORD=password
 

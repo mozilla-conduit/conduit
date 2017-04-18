@@ -29,9 +29,16 @@ set -x
 # Include the protocol (http or https), domain name, and port number if you are
 # using a port other than 80 (http) or 443 (https).
 ./bin/config set phabricator.base-uri "${PHABRICATOR_URI}"
+./bin/config set security.alternate-file-domain "${PHABRICATOR_URI}"
 
 # FIXME: make this happen on first-run only!
 # See 'bin/storage status' for possible first-run control points.
 ./bin/storage upgrade --force
+
+# Enable large attachments in MySQL
+./bin/config set storage.mysql-engine.max-size 8388608
+
+# Start phd service
+./bin/phd start
 
 exec php-fpm
