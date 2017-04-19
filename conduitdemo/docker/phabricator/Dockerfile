@@ -96,6 +96,10 @@ RUN curl -fsSL https://github.com/phacility/phabricator/archive/${PHABRICATOR_GI
     && rm phabricator.tar.gz arcanist.tar.gz libphutil.tar.gz \
     && chown -R www-data:www-data phabricator arcanist libphutil
 
+# Set recommended runtime configuration values to silence setup warnings.
+RUN phabricator/bin/config set storage.mysql-engine.max-size 8388608 \
+    && phabricator/bin/config set pygments.enabled true
+
 VOLUME ["/repo"]
 
 COPY wait-for-mysql.php /usr/local/bin/wait-for-mysql.php

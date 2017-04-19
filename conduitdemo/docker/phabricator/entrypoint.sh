@@ -48,10 +48,9 @@ set -x
 # See 'bin/storage status' for possible first-run control points.
 ./bin/storage upgrade --force
 
-# Enable large attachments in MySQL
-./bin/config set storage.mysql-engine.max-size 8388608
-
-# Start phd service
+# NOTE: This works for development, but workers should probably be run in a
+# separate container in production.
+# Start phd service so Phabricator daemons run.
 ./bin/phd start
 
 exec php-fpm
