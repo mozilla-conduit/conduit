@@ -98,6 +98,9 @@ RUN curl -fsSL https://github.com/phacility/phabricator/archive/${PHABRICATOR_GI
 
 VOLUME ["/repo"]
 
+COPY wait-for-mysql.php /usr/local/bin/wait-for-mysql.php
+RUN chmod +x /usr/local/bin/wait-for-mysql.php
+
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 

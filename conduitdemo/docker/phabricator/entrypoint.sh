@@ -16,6 +16,9 @@ cd phabricator
 ./bin/config set repository.default-local-path "${REPOSITORY_LOCAL_PATH}"
 chown -R www-data:www-data $REPOSITORY_LOCAL_PATH
 
+# Wait for MySQL to come up
+wait-for-mysql.php
+
 ./bin/config set mysql.host ${MYSQL_HOST}
 ./bin/config set mysql.port ${MYSQL_PORT}
 ./bin/config set mysql.user ${MYSQL_USER}
