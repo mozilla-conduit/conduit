@@ -15,6 +15,8 @@ echo "Version info:"
 echo "phabricator git SHA:  $PHABRICATOR_GIT_SHA"
 echo "arcanist git SHA:     $ARCANIST_GIT_SHA"
 echo "libphutil Git SHA:    $LIBPHUTIL_GIT_SHA"
+HG_VER=$(hg --version | grep -o "(version .*)")
+echo "mercurial client: $HG_VER"
 
 set -x
 
