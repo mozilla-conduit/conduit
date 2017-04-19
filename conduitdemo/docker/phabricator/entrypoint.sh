@@ -8,7 +8,15 @@
 
 # Configure Phabricator on startup from environment variables.
 
-set -ex
+set -e
+
+echo "Starting Phabricator"
+echo "Version info:"
+echo "phabricator git SHA:  $PHABRICATOR_GIT_SHA"
+echo "arcanist git SHA:     $ARCANIST_GIT_SHA"
+echo "libphutil Git SHA:    $LIBPHUTIL_GIT_SHA"
+
+set -x
 
 cd phabricator
 
